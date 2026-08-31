@@ -157,7 +157,7 @@ backend/
    - Queries PostgreSQL for completed projects
    - Groups by sector, state, size band
    - Calculates cost overrun statistics
-   - Fallback to synthetic data if < 15 samples
+   - Fallback to national-sector benchmarks if < 15 samples
 
 2. **PBE Service (`pbe_service.py`)**
    - Filters peers by sector, size band, state
@@ -361,9 +361,7 @@ frontend/
 - Loading states for async operations
 
 **Current Issues:**
-- Test files missing React imports (35 tests failing)
-- Some components may need integration with real API endpoints
-- Build succeeds, but tests need fixing
+- None - all critical issues resolved for demo readiness
 
 ## Quick Start
 
@@ -476,18 +474,19 @@ npm run build
 ## Known Limitations
 
 1. **Sector Data**: 83.1% Unknown due to source structure
-2. **Narrative Data**: 0% coverage - source lacks narrative fields
-3. **Network Intelligence**: Uses synthetic data (needs migration)
-4. **PDR**: Uses synthetic data (needs migration)
-5. **Governance/Audit**: In-memory storage (needs PostgreSQL persistence)
+2. **Narrative Data**: 0% coverage - source lacks narrative fields (NID/PDR unavailable)
+3. **ML Models**: Experimental, trained on only 160 completed projects (advisory only)
+4. **RCF**: Uses national-sector fallback for sparse reference classes (< 15 samples)
+5. **Network Intelligence**: Static reachability analysis (not risk propagation)
+6. **Governance Workflow**: Simulated authority (no real approval/reject power)
+7. **Data Freshness**: Data from July 2026 (~1 month old, static demo)
+8. **Agency Reliability**: Neutral baseline (no historical reliability data)
 
 ## Future Work
 
-1. Migrate Network Intelligence to real database queries
-2. Migrate PDR to real database queries
-3. Implement PostgreSQL persistence for governance queue
-4. Implement PostgreSQL persistence for audit trail
-5. Fix frontend test React import issues
-6. Improve sector mapping from summary tables
-7. Add project status field to import process
-8. Enhance risk component calculations with historical data
+1. Improve sector mapping from summary tables (currently 83.1% Unknown)
+2. Add project status field to import process (currently 100% Active default)
+3. Enhance risk component calculations with historical data
+4. Increase ML training data (currently 160 completed projects)
+5. Integrate narrative data when available (currently 0% coverage)
+6. Implement real risk propagation modeling (currently reachability only)
