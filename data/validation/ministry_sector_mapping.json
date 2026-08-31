@@ -1,0 +1,66 @@
+{
+  "Department for Promotion of Industry & Internal Trade": [
+    "Logistics Infrastructure",
+    "Real Estate"
+  ],
+  "Department of Higher Education": [
+    "Education"
+  ],
+  "Department of Sports": [
+    "Education"
+  ],
+  "Department of Telecommunications": [
+    "Telecommunication"
+  ],
+  "Department of Water Resources, River Development & GR": [
+    "Waste & Water",
+    "Water Resources"
+  ],
+  "Ministry of Civil Aviation": [
+    "Aviation & Aviation Infrastructure"
+  ],
+  "Ministry of Coal": [
+    "Coal",
+    "Electricity Generation",
+    "Railways"
+  ],
+  "Ministry of Health & Family Welfare": [
+    "Healthcare"
+  ],
+  "Ministry of Housing & Urban Affairs": [
+    "Construction",
+    "Real Estate",
+    "Urban Public Transport",
+    "Waste & Water"
+  ],
+  "Ministry of Labour and Employment": [
+    "Healthcare"
+  ],
+  "Ministry of Mines": [
+    "Construction",
+    "Metals & Mining"
+  ],
+  "Ministry of Petroleum & Natural Gas": [
+    "Energy Storage",
+    "Oil & Gas"
+  ],
+  "Ministry of Ports, Shipping and Waterways": [
+    "Inland Waterways",
+    "Shipping"
+  ],
+  "Ministry of Power": [
+    "Coal",
+    "Electricity Generation",
+    "Transmission & Distribution"
+  ],
+  "Ministry of Railways": [
+    "Railways"
+  ],
+  "Ministry of Road Transport & Highways": [
+    "Roads & Highways"
+  ],
+  "Ministry of Steel": [
+    "Metals & Mining",
+    "Steel"
+  ]
+}

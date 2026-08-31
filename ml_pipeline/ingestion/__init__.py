@@ -1,0 +1,1 @@
+"""PAIMANA PDF ingestion pipeline."""

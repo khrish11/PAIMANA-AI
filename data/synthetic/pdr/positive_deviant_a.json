@@ -1,0 +1,35 @@
+{
+  "SYNTHETIC_DATA": "FOR TESTING ONLY",
+  "project": {
+    "project_id": "synthetic-project-a",
+    "project_name": "Highway Project Alpha",
+    "sector": "Roads",
+    "state": "Uttar Pradesh",
+    "reference_class_id": "roads-large-north",
+    "sanctioned_cost": 1000000000,
+    "current_cost": 950000000,
+    "planned_duration_months": 36,
+    "elapsed_months": 18,
+    "progress_percent": 55,
+    "months_tracked": 12,
+    "data_confidence_score": 85,
+    "reporting_month": "2026-03-01"
+  },
+  "reference_class": {
+    "class_id": "roads-large-north",
+    "sector": "Roads",
+    "size_band": "Large",
+    "region": "North",
+    "sample_count": 25,
+    "cost_overrun_p50": 0.30,
+    "cost_overrun_std": 0.15,
+    "schedule_delay_p50": 12,
+    "schedule_delay_std": 6
+  },
+  "narrative": "We implemented weekly direct coordination with district administration, which significantly reduced land acquisition delays. The district collector was personally involved in resolving disputes. This approach helped us acquire 85% of required land within 6 months, compared to the reference class average of 12 months. Regular meetings with revenue officials and proactive engagement with landowners prevented litigation.",
+  "expected_residuals": {
+    "cost_residual_zscore": -1.8,
+    "schedule_residual_zscore": -2.1
+  },
+  "expected_deviant_status": true
+}

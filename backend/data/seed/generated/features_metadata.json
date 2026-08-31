@@ -1,0 +1,9 @@
+{
+  "limitation_flags": [
+    "actual_final_cost_not_established_supervised_labels_required_for_real_training",
+    "actual_completion_date_not_established_schedule_labels_required_for_real_training",
+    "contractor_id_not_established_pbe_or_blast_radius_must_flag_missing_relationships",
+    "land_acquisition_status_not_established_no_direct_land_feature_assumed",
+    "thresholds_and_weights_proposed_pending_calibration_on_real_data"
+  ]
+}

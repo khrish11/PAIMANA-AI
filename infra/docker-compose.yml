@@ -1,0 +1,105 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-paimana}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-paimanapass}
+      POSTGRES_DB: ${POSTGRES_DB:-paimana_ai}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-paimana}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg2://paimana:paimanapass@db:5432/paimana_ai
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ../backend:/app
+    working_dir: /app
+    command: ["python", "-m", "alembic", "upgrade", "head"]
+
+  api:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg2://paimana:paimanapass@db:5432/paimana_ai
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      PYTHONPATH: /app:/project_root
+      USE_SYNTHETIC_DATA: false
+    ports:
+      - "8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_completed_successfully
+    volumes:
+      - ../backend:/app
+      - ../:/project_root
+    working_dir: /app
+    command: ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-paimana_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-paimana_minio_password}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.frontend
+    environment:
+      VITE_API_BASE_URL: /api/v1
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+  nginx:
+    image: nginx:1.26
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - frontend
+
+volumes:
+  postgres_data:
+  minio_data:
+  ollama_data:

@@ -1,0 +1,116 @@
+{
+  "models": [
+    {
+      "model_type": "random_forest",
+      "version": "rf-exp-v1",
+      "status": "experimental",
+      "active": false,
+      "target": "delay_gt_6_months",
+      "training_period": "2025-07 to 2026-06",
+      "validation_period": "2026-07",
+      "holdout_period": "2026-07",
+      "feature_version": "v1",
+      "metrics": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "brier": 0.1291420047426037,
+        "balanced_accuracy": 0.8333333333333333,
+        "mcc": 0.6666666666666666,
+        "confusion_matrix": {
+          "true_negative": 2,
+          "false_positive": 1,
+          "false_negative": 0,
+          "true_positive": 2
+        },
+        "positive_rate": 0.4
+      },
+      "artifact_path": "D:\\SIH 2026\\SIH PROJECT\\data\\artifacts\\experimental\\random_forest_experimental.pkl",
+      "calibration_status": "not_calibrated",
+      "limitations": [
+        "Small sample size (160 labeled projects)",
+        "Class imbalance (60% positive)",
+        "Short temporal window (13 months)",
+        "Not production-validated"
+      ],
+      "registered_at": "2026-08-28T21:48:08.645954"
+    },
+    {
+      "model_type": "xgboost",
+      "version": "xgb-exp-v1",
+      "status": "experimental",
+      "active": false,
+      "target": "delay_gt_6_months",
+      "training_period": "2025-07 to 2026-06",
+      "validation_period": "2026-07",
+      "holdout_period": "2026-07",
+      "feature_version": "v1",
+      "metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "roc_auc": 1.0,
+        "pr_auc": 1.0,
+        "brier": 0.08263821211308793,
+        "balanced_accuracy": 1.0,
+        "mcc": 1.0,
+        "confusion_matrix": {
+          "true_negative": 3,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_positive": 2
+        },
+        "positive_rate": 0.4
+      },
+      "artifact_path": "D:\\SIH 2026\\SIH PROJECT\\data\\artifacts\\experimental\\xgboost_experimental.pkl",
+      "calibration_status": "not_calibrated",
+      "limitations": [
+        "Small sample size (160 labeled projects)",
+        "Class imbalance (60% positive)",
+        "Short temporal window (13 months)",
+        "Not production-validated"
+      ],
+      "registered_at": "2026-08-28T21:48:08.648530"
+    },
+    {
+      "model_type": "lightgbm",
+      "version": "lgb-exp-v1",
+      "status": "experimental",
+      "active": false,
+      "target": "delay_gt_6_months",
+      "training_period": "2025-07 to 2026-06",
+      "validation_period": "2026-07",
+      "holdout_period": "2026-07",
+      "feature_version": "v1",
+      "metrics": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "roc_auc": 0.8333333333333334,
+        "pr_auc": 0.8333333333333333,
+        "brier": 0.16991463534447074,
+        "balanced_accuracy": 0.8333333333333333,
+        "mcc": 0.6666666666666666,
+        "confusion_matrix": {
+          "true_negative": 2,
+          "false_positive": 1,
+          "false_negative": 0,
+          "true_positive": 2
+        },
+        "positive_rate": 0.4
+      },
+      "artifact_path": "D:\\SIH 2026\\SIH PROJECT\\data\\artifacts\\experimental\\lightgbm_experimental.pkl",
+      "calibration_status": "not_calibrated",
+      "limitations": [
+        "Small sample size (160 labeled projects)",
+        "Class imbalance (60% positive)",
+        "Short temporal window (13 months)",
+        "Not production-validated"
+      ],
+      "registered_at": "2026-08-28T21:48:08.649291"
+    }
+  ],
+  "version": "1.0"
+}

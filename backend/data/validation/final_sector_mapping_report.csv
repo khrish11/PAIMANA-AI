@@ -1,0 +1,5 @@
+source_ministry,canonical_sector,mapping_method,confidence,record_count
+Ministry of Road Transport & Highways,Roads & Highways,ministry_to_sector_deterministic,HIGH,80
+Offshore,PAN India,ministry_to_sector_deterministic,HIGH,25
+Steel,Railways,ministry_to_sector_deterministic,HIGH,3
+Sikkim,Tamil Nadu,ministry_to_sector_deterministic,HIGH,1
