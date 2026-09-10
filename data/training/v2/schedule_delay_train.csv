@@ -1,0 +1,253 @@
+project_id,original_completion_date,revised_completion_date,delay_months,delay_gt_3_months,delay_gt_6_months,delay_gt_12_months,completion_reason,completion_date
+PC-617949,03/2026,03/2026,0,0,0,0,progress_100,2026-06
+PC-604791,07/2024,03/2027,32,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-701568,02/2023,07/2024,17,1,1,1,expenditure_ge_sanctioned,2026-02
+PC-619165,02/2023,12/2026,46,1,1,1,progress_100,2026-07
+PC-616615,04/2025,12/2026,20,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618489,07/2024,03/2027,32,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-604792,09/2021,09/2025,48,1,1,1,expenditure_ge_sanctioned,2025-08
+PC-618285,10/2025,01/2026,3,0,0,0,progress_100,2026-05
+PC-618553,02/2025,07/2026,17,1,1,1,progress_100,2026-05
+PC-618463,10/2021,08/2026,58,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-guwahati_refinery_expansion_[1-assam-ministry_of_petroleu,05/2026,10/2023,-31,0,0,0,expenditure_ge_sanctioned,2026-05
+"PN-ioe_projects_[civil_works],_ii-west benga-indian_institute_of_",08/2025,03/2023,-29,0,0,0,expenditure_ge_sanctioned,2025-09
+PC-705793,03/2024,03/2026,24,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618406,07/2021,11/2026,64,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619084,04/2009,10/2026,210,1,1,1,progress_100,2026-05
+PC-618337,03/2023,03/2026,36,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618118,07/2024,07/2025,12,1,1,0,progress_100,2026-05
+PN-durgawati_reservoir_project_70-bihar-irrigation_and_cad-t,09/2025,12/2019,-69,0,0,0,expenditure_ge_sanctioned,2025-09
+PC-619077,03/2020,08/2026,77,1,1,1,progress_100,2026-07
+PN-bikaner_solar_power_project_70-rajasthan-satluj_jal_vidyut_ni,12/2025,04/2024,-20,0,0,0,expenditure_ge_sanctioned,2025-12
+PC-707039,12/2026,07/2026,-5,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-602579,01/2024,05/2026,28,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619193,02/2017,08/2026,114,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618674,01/2025,08/2026,19,1,1,1,progress_100,2026-07
+PC-618776,05/2025,09/2026,16,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618706,11/2021,09/2026,58,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-construction_of_four-lane_elev-uttar prad-morth,09/2023,09/2023,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-400010,09/2021,07/2026,58,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705504,12/2025,03/2026,3,0,0,0,expenditure_ge_sanctioned,2026-07
+PN-ahmedabad_-_dholera_pkg_ii_fro-gujarat-nhai,01/2024,01/2024,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-400100,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618462,05/2023,08/2026,39,1,1,1,progress_100,2026-07
+PC-701719,07/2022,07/2026,48,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618239,09/2018,07/2025,82,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705863,07/2025,09/2025,2,0,0,0,progress_100,2025-09
+PC-618850,07/2020,08/2026,73,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PN-transmission_scheme_for_evacua-gujarat-power_grid_corporati,01/2026,03/2025,-10,0,0,0,expenditure_ge_sanctioned,2026-01
+PC-618382,04/2024,05/2025,13,1,1,1,progress_100,2026-05
+PN-pune_-_miraj-londa_[467_kilome-maharashtr-central_railway,02/2025,02/2025,0,0,0,0,expenditure_ge_sanctioned,2026-04
+PC-703586,12/2024,01/2026,13,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-706763,10/2026,06/2026,-4,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-618507,06/2025,08/2026,14,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618499,07/2025,08/2026,13,1,1,1,progress_100,2026-07
+PN-transmission_system_strengthen-multi-stat-power_grid_corporati,11/2023,11/2023,0,0,0,0,expenditure_ge_sanctioned,2025-11
+PN-dibrugarh_water_supply_infrast-assam-ministry_of_housing_,12/2025,03/2023,-33,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-618072,07/2024,03/2026,20,1,1,1,progress_100,2026-07
+PC-705735,03/2027,03/2028,12,1,1,0,expenditure_ge_sanctioned,2026-07
+PN-arjun_sahayak_project_400117-uttar prad-irrigation_&_water_r,10/2025,12/2019,-70,0,0,0,expenditure_ge_sanctioned,2025-09
+PN-rajiv_bhima_lift_irrigation_sc-telangana-irrigation_and_cad-t,06/2026,12/2019,-78,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-702639,03/2018,05/2026,98,1,1,1,expenditure_ge_sanctioned,2026-04
+PC-617933,08/2026,08/2026,0,0,0,0,progress_100,2026-05
+PC-400065,05/2025,09/2025,4,1,0,0,progress_100,2025-11
+PN-challakere_to_hariyur_section_-karnataka-nhai,01/2023,01/2023,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-619097,05/2020,08/2026,75,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-619122,12/2024,06/2026,18,1,1,1,progress_100,2026-05
+PC-705444,03/2022,12/2026,57,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618165,01/2026,07/2026,6,1,0,0,progress_100,2026-06
+PC-618583,01/2024,05/2024,4,1,0,0,progress_100,2026-05
+PC-618861,07/2023,08/2026,37,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-603945,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618839,02/2022,04/2026,50,1,1,1,progress_100,2026-05
+PC-701377,12/2019,03/2026,75,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619137,08/2022,05/2026,45,1,1,1,progress_100,2026-04
+PN-chakur_loha_section_of_nh-361_-maharashtr-nhai,03/2021,03/2021,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-619136,01/2026,08/2026,7,1,1,0,progress_100,2026-07
+PC-702808,03/2024,08/2026,29,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-608922,11/2023,11/2025,24,1,1,1,expenditure_ge_sanctioned,2025-10
+PN-reconstruction_of_existing_2_l-uttarakhan-morth,06/2019,06/2019,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618515,04/2025,06/2026,14,1,1,1,progress_100,2026-05
+PC-619218,10/2021,08/2026,58,1,1,1,progress_100,2026-07
+PC-706950,03/2023,06/2026,39,1,1,1,expenditure_ge_sanctioned,2026-06
+PN-transmission_system_for_evacua-rajasthan-power_grid_corporati,04/2025,04/2025,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618571,12/2025,12/2026,12,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-709813,10/2027,10/2027,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-617907,09/2024,04/2026,19,1,1,1,progress_100,2026-05
+PC-619147,09/2022,01/2026,40,1,1,1,expenditure_ge_sanctioned,2026-05
+PC-400115,12/2019,03/2026,75,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618444,08/2024,07/2026,23,1,1,1,expenditure_ge_sanctioned,2026-06
+PC-618429,04/2022,08/2026,52,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-611737,11/2023,10/2025,23,1,1,1,progress_100,2025-10
+PN-adraj_moti_vijapur_40_kms_6119-gujarat-western_railway_(wr),12/2025,05/2026,5,1,0,0,expenditure_ge_sanctioned,2025-12
+PC-618008,09/2023,12/2024,15,1,1,1,progress_100,2026-05
+PC-705359,03/2025,03/2029,48,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-707215,11/2026,03/2026,-8,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-618803,08/2025,12/2026,16,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-trivandrum-_kanyakumari_705635-multi-stat-southern_railway_[sr,03/2026,03/2025,-12,0,0,0,expenditure_ge_sanctioned,2026-02
+PC-618796,04/2021,08/2026,64,1,1,1,progress_100,2026-07
+PC-701391,12/2019,06/2026,78,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-705506,12/2024,11/2025,11,1,1,0,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-709827,12/2025,02/2026,2,0,0,0,progress_100,2026-02
+PC-618194,02/2020,09/2025,67,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-702635,03/2021,09/2026,66,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618762,02/2020,08/2026,78,1,1,1,progress_100,2026-07
+PN-4l_of_bal_works_of_mahuva_to_k-gujarat-nhai,09/2022,09/2022,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-701228,12/2012,09/2026,165,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705432,05/2015,12/2027,151,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618849,03/2024,05/2026,26,1,1,1,progress_100,2026-05
+PC-618298,01/2023,08/2026,43,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705588,03/2025,03/2026,12,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-619145,08/2019,03/2025,67,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-618504,12/2023,08/2026,32,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400277,12/2025,12/2027,24,1,1,1,expenditure_ge_sanctioned,2026-06
+PC-705437,03/2027,12/2027,9,1,1,0,expenditure_ge_sanctioned,2026-06
+PC-400273,03/2019,02/2026,83,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618799,12/2022,11/2026,47,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618372,01/2025,06/2025,5,1,0,0,progress_100,2026-05
+PC-705779,12/2024,03/2026,15,1,1,1,expenditure_ge_sanctioned,2025-11
+PC-618502,01/2024,06/2026,29,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-05
+PC-618692,06/2022,08/2026,50,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-06
+PN-penukonda_-_dharmavaram_doubli-andhra pra-south_western_railwa,02/2026,03/2026,1,0,0,0,expenditure_ge_sanctioned,2026-02
+PC-619144,08/2018,06/2026,94,1,1,1,progress_100,2026-05
+PC-618955,11/2021,08/2026,57,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-615327,03/2025,12/2025,9,1,1,0,progress_100,2026-04
+PC-618953,08/2023,03/2027,43,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400253,12/2025,12/2026,12,1,1,0,expenditure_ge_sanctioned,2026-06
+PC-702637,03/2023,08/2025,29,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618465,11/2023,05/2026,30,1,1,1,expenditure_ge_sanctioned,2026-05
+PC-619222,09/2024,08/2026,23,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400141,12/2022,06/2026,42,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705629,12/2025,01/2027,13,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705651,03/2022,12/2025,45,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-02
+PC-618774,07/2023,11/2025,28,1,1,1,progress_100,2026-05
+PC-618346,06/2022,08/2026,50,1,1,1,progress_100,2026-07
+PC-705635,03/2025,06/2028,39,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-701386,12/2019,06/2028,102,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-617379,03/2020,12/2026,81,1,1,1,expenditure_ge_sanctioned,2026-06
+PC-602792,02/2025,06/2026,16,1,1,1,progress_100,2026-07
+PC-400103,12/2019,12/2026,84,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-ahmedabad_-_dholera_pkg_i_from-gujarat-nhai,01/2024,01/2024,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-612239,09/2024,12/2025,15,1,1,1,expenditure_ge_sanctioned,2025-11
+PC-618503,07/2023,08/2026,37,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-701376,12/2019,03/2026,75,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-transmission_system_for_evacua-jammu and -power_grid_corporati,11/2025,04/2025,-7,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-619115,12/2020,06/2021,6,1,0,0,progress_100,2026-02
+PC-705356,12/2026,03/2026,-9,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-618696,10/2021,09/2022,11,1,1,0,progress_100,2026-02
+PC-705500,12/2025,10/2026,10,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-400168,04/2025,06/2027,26,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705659,03/2026,03/2026,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-701415,04/2022,03/2026,47,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619063,11/2024,06/2026,19,1,1,1,progress_100,2026-05
+PC-618438,07/2024,08/2025,13,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PN-transmission_system_for_streng-multi-stat-power_grid_corporati,11/2025,12/2024,-11,0,0,0,expenditure_ge_sanctioned,2025-11
+PN-domingarh-gorakhpur-gorakhpur_-uttar prad-north_eastern_railwa,09/2025,02/2025,-7,0,0,0,expenditure_ge_sanctioned,2025-10
+PC-602525,04/2020,12/2026,80,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705237,03/2022,12/2025,45,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618423,08/2025,03/2026,7,1,1,0,progress_100,2026-07
+PC-618240,03/2024,08/2026,29,1,1,1,progress_100,2026-07
+PC-701396,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705481,12/2025,12/2027,24,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-establishment_of_khavda_poolin-gujarat-power_grid_corporati,12/2025,12/2024,-12,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-705358,12/2026,12/2026,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-617924,04/2025,03/2026,11,1,1,0,progress_100,2026-05
+PC-618600,07/2024,08/2026,25,1,1,1,progress_100,2026-07
+PC-400301,02/2017,09/2026,115,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400019,12/2026,09/2027,9,1,1,0,expenditure_ge_sanctioned,2026-06
+PN-transmission_network_expansion-multi-stat-power_grid_corporati,05/2026,06/2023,-35,0,0,0,expenditure_ge_sanctioned,2026-05
+PC-400369,03/2024,03/2027,36,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-701410,06/2021,06/2026,60,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618852,06/2024,08/2026,26,1,1,1,progress_100,2026-07
+PC-612259,10/2024,07/2026,21,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705633,12/2025,12/2026,12,1,1,0,expenditure_ge_sanctioned,2026-06
+PC-619301,05/2021,08/2026,63,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-617915,09/2025,07/2026,10,1,1,0,progress_100,2026-06
+PC-705392,03/2025,12/2029,57,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618460,11/2023,04/2026,29,1,1,1,progress_100,2026-06
+PC-619067,05/2019,06/2026,85,1,1,1,progress_100,2026-05
+PC-618164,06/2026,08/2026,2,0,0,0,progress_100,2026-07
+PC-617968,02/2020,03/2024,49,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-widening_&_strengthening_of_ex-telangana-morth,06/2020,06/2020,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-619120,06/2022,09/2026,51,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618704,01/2027,08/2026,-5,0,0,0,progress_100,2026-07
+PC-618935,06/2025,05/2026,11,1,1,0,progress_100,2026-05
+PC-705616,10/2024,03/2026,17,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-602096,09/2010,03/2027,198,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-6l_of_chiloda-naroda_section_f-gujarat-nhai,05/2019,05/2019,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-619215,09/2020,09/2026,72,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618174,10/2026,10/2026,0,0,0,0,progress_100,2026-07
+PC-611917,03/2025,12/2026,21,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618902,12/2021,09/2026,57,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705458,12/2026,12/2026,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-617887,10/2023,07/2026,33,1,1,1,progress_100,2026-06
+PC-705668,03/2025,06/2026,15,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619146,09/2019,07/2026,82,1,1,1,expenditure_ge_sanctioned,2026-06
+PC-705498,12/2026,12/2026,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PN-construction_of_100_bedded_esi-jammu and -employee's_state_ins,12/2025,09/2024,-15,0,0,0,expenditure_ge_sanctioned,2025-12
+PC-702735,03/2023,05/2026,38,1,1,1,progress_100,2026-03
+PC-618834,09/2023,04/2025,19,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-05
+PC-709747,12/2025,12/2025,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-400101,12/2019,03/2027,87,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618236,05/2018,11/2023,66,1,1,1,progress_100,2026-07
+PC-619320,11/2013,06/2026,151,1,1,1,progress_100,2026-05
+PN-vijapur_ambliyasan_gauge_conve-gujarat-western_railway_(wr),10/2025,05/2026,7,1,1,0,expenditure_ge_sanctioned,2025-10
+PC-705730,12/2026,12/2029,36,1,1,1,expenditure_ge_sanctioned,2026-06
+PC-702958,03/2023,08/2026,41,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-611937,05/2026,12/2025,-5,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-619202,09/2022,08/2026,47,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-602223,12/2018,03/2027,99,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-transmission_system_strengthen-delhi-power_grid_corporati,11/2025,09/2023,-26,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-705566,02/2025,09/2025,7,1,1,0,expenditure_ge_sanctioned,2025-09
+PC-618023,04/2025,03/2026,11,1,1,0,progress_100,2026-06
+PC-705567,03/2025,05/2026,14,1,1,1,progress_100,2026-07
+PC-705660,12/2025,12/2025,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-705526,03/2025,10/2025,7,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-618825,12/2021,09/2026,57,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400261,03/2023,04/2027,49,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-617934,09/2019,08/2026,83,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705253,12/2020,12/2026,72,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-612178,06/2025,03/2026,9,1,1,0,progress_100,2026-03
+PC-618501,01/2024,06/2026,29,1,1,1,progress_100,2026-05
+PN-vadodara_mumbai_expressway_gan-gujarat-nhai,11/2023,11/2023,0,0,0,0,expenditure_ge_sanctioned,2026-06
+"PN-phephna-indara,_mau-shahganj_d-uttar prad-rvnl_-_i",12/2025,12/2024,-12,0,0,0,expenditure_ge_sanctioned,2025-12
+PN-vadodara_mumbai_expressway_ena-gujarat-nhai,12/2023,12/2023,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618579,07/2021,08/2026,61,1,1,1,progress_100,2026-07
+PC-618755,03/2026,06/2026,3,0,0,0,progress_100,2026-05
+PC-705453,02/2027,02/2027,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-619003,05/2021,11/2026,66,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-4l_kodinar_-_veraval_package_v-gujarat-nhai,09/2023,09/2023,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-612851,09/2025,01/2026,4,1,0,0,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-705375,02/2025,02/2026,12,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-701372,12/2019,03/2026,75,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705933,10/2027,10/2027,0,0,0,0,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-705410,12/2025,12/2027,24,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-himmatnagar_khedbrahma_gauge_c-gujarat-western_railway_(wr),08/2025,06/2001,-290,0,0,0,expenditure_ge_sanctioned,2025-10
+PC-618533,09/2016,08/2026,119,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-07
+PC-617975,11/2019,07/2024,56,1,1,1,progress_100,2026-05
+PC-701127,03/2026,06/2026,3,0,0,0,progress_100,2026-07
+PC-618549,06/2025,12/2026,18,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-aligarh-kanpur_pkg_i_[aligarh--uttar prad-nhai,12/2024,06/2022,-30,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-400105,06/2022,12/2026,54,1,1,1,expenditure_ge_sanctioned,2026-04
+PC-619103,04/2018,08/2026,100,1,1,1,progress_100,2026-07
+PC-701404,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-rehabilitation_and_up_gradatio-mizoram-nhidcl,10/2024,06/2022,-28,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-705650,03/2027,12/2027,9,1,1,0,expenditure_ge_sanctioned,2026-06
+PC-618188,05/2025,08/2026,15,1,1,1,progress_100,2026-07
+PC-618598,06/2022,09/2026,51,1,1,1,progress_100,2026-07
+PC-619092,07/2022,07/2026,48,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-617970,06/2019,10/2023,52,1,1,1,progress_100,2026-05
+PC-618442,08/2024,06/2026,22,1,1,1,progress_100,2026-07
+PC-705366,03/2020,06/2027,87,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619069,05/2022,12/2026,55,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-609041,03/2023,12/2026,45,1,1,1,expenditure_ge_sanctioned,2025-08
+PN-6l_of_it_city_chowk_to_kurali_-punjab-national_highways_au,10/2024,10/2024,0,0,0,0,expenditure_ge_sanctioned,2026-03
+PC-705782,03/2025,08/2026,17,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705799,12/2025,12/2025,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618259,03/2023,03/2024,12,1,1,0,progress_100,2026-05
+PC-619073,02/2023,09/2026,43,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705454,12/2025,12/2025,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-705503,02/2025,08/2025,6,1,0,0,"progress_100, expenditure_ge_sanctioned",2026-03
+PN-4l_of_hubli_-_hospet_section_o-karnataka-nhai,03/2020,03/2020,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-400107,06/2023,06/2027,48,1,1,1,expenditure_ge_sanctioned,2026-04
+PC-400111,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07

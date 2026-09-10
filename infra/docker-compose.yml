@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-paimanapass}
       POSTGRES_DB: ${POSTGRES_DB:-paimana_ai}
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -39,7 +39,7 @@ services:
       DATABASE_URL: postgresql+psycopg2://paimana:paimanapass@db:5432/paimana_ai
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
-      PYTHONPATH: /app:/project_root
+      PYTHONPATH: /app
       USE_SYNTHETIC_DATA: false
     ports:
       - "8001:8001"
@@ -50,7 +50,6 @@ services:
         condition: service_completed_successfully
     volumes:
       - ../backend:/app
-      - ../:/project_root
     working_dir: /app
     command: ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
 
@@ -80,8 +79,8 @@ services:
 
   frontend:
     build:
-      context: ..
-      dockerfile: infra/Dockerfile.frontend
+      context: ../frontend
+      dockerfile: ../infra/Dockerfile.frontend
     environment:
       VITE_API_BASE_URL: /api/v1
     ports:

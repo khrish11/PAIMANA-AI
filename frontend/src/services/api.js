@@ -54,6 +54,79 @@ export async function createSubmission(submissionData) {
   return response.json();
 }
 
+// New Data Operations API
+export async function createProjectData(projectData) {
+  const response = await fetch(`${apiBaseUrl}/data_operations/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(projectData),
+  });
+  if (!response.ok) throw new Error('Failed to create project');
+  return response.json();
+}
+
+export async function createSubmissionData(projectId, submissionData) {
+  const response = await fetch(`${apiBaseUrl}/data_operations/projects/${projectId}/submissions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(submissionData),
+  });
+  if (!response.ok) throw new Error('Failed to create submission');
+  return response.json();
+}
+
+export async function previewBulkImport(csvContent, batchName, importMethod = 'csv', sourceFile = null) {
+  const response = await fetch(`${apiBaseUrl}/data_operations/import/preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      csv_content: csvContent,
+      batch_name: batchName,
+      import_method: importMethod,
+      source_file: sourceFile,
+    }),
+  });
+  if (!response.ok) throw new Error('Failed to preview import');
+  return response.json();
+}
+
+export async function executeBulkImport(csvContent, batchName, importMethod = 'csv', sourceFile = null, allowRevisions = false) {
+  const response = await fetch(`${apiBaseUrl}/data_operations/import/execute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      csv_content: csvContent,
+      batch_name: batchName,
+      import_method: importMethod,
+      source_file: sourceFile,
+      allow_revisions: allowRevisions,
+    }),
+  });
+  if (!response.ok) throw new Error('Failed to execute import');
+  return response.json();
+}
+
+export async function getImportBatches(status = null, limit = 50) {
+  const params = new URLSearchParams();
+  if (status) params.append('status', status);
+  params.append('limit', limit);
+  const response = await fetch(`${apiBaseUrl}/data_operations/import/batches?${params}`);
+  if (!response.ok) throw new Error('Failed to fetch import batches');
+  return response.json();
+}
+
+export async function getDashboardStats() {
+  const response = await fetch(`${apiBaseUrl}/data_operations/dashboard/stats`);
+  if (!response.ok) throw new Error('Failed to fetch dashboard stats');
+  return response.json();
+}
+
+export async function getProjectHistory(projectId) {
+  const response = await fetch(`${apiBaseUrl}/data_operations/projects/${projectId}/history`);
+  if (!response.ok) throw new Error('Failed to fetch project history');
+  return response.json();
+}
+
 // Imports
 export async function previewImport(file) {
   const formData = new FormData();

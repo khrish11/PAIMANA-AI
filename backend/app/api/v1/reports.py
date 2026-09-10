@@ -13,6 +13,7 @@ from app.core.security import get_current_user
 from app.db.session import get_db
 from app.models.projects import Project
 from app.models.risk_scores import RiskScore
+from app.models.cuf_submissions import CUFSubmission
 from app.schemas.schemas import (
     ReportMetadata,
     NationalReportResponse,
@@ -27,6 +28,8 @@ from app.services.anomaly_detection import detect_all_anomalies
 from app.services.risk_scoring import compute_risk_score
 
 router = APIRouter(tags=["reports"])
+
+_reports_db: list[ReportMetadata] = []
 
 
 def _create_report_metadata(
@@ -238,24 +241,34 @@ def get_sector_report(
     sector: str,
     user: Any = Depends(get_current_user),
     reporting_period: str = Query("2026-03"),
+    db: Session = Depends(get_db),
 ):
-    """Generate sector-specific risk report."""
-    
-    projects = load_projects()
-    sector_projects = [p for p in projects if p.get("sector") == sector]
-    
-    project_count = len(sector_projects)
+    """Generate sector-specific risk report from PostgreSQL."""
+    projects = db.query(Project).filter(Project.sector == sector).all()
+
+    project_count = len(projects)
     total_risk = 0
     total_dcs = 0
     total_anomalies = 0
     risk_distribution = {"LOW": 0, "MODERATE": 0, "HIGH": 0, "VERY_HIGH": 0, "CRITICAL": 0}
-    
-    for project in sector_projects:
-        sanctioned = project["sanctioned_cost"]
-        revised = project.get("revised_cost", sanctioned)
+
+    for project in projects:
+        latest_risk = db.query(RiskScore).filter(
+            RiskScore.project_id == project.project_id
+        ).order_by(RiskScore.reporting_month.desc()).first()
+
+        latest_submission = db.query(CUFSubmission).filter(
+            CUFSubmission.project_id == project.project_id
+        ).order_by(CUFSubmission.reporting_month.desc()).first()
+
+        sanctioned = float(project.sanctioned_cost) if project.sanctioned_cost else 0
+        revised = float(latest_submission.revised_cost) if latest_submission and latest_submission.revised_cost else sanctioned
+        expenditure = float(latest_submission.expenditure) if latest_submission and latest_submission.expenditure else 0
+        progress = float(latest_submission.physical_progress) if latest_submission and latest_submission.physical_progress else None
+
         cost_overrun_ratio = revised / sanctioned if sanctioned > 0 else 1.0
         schedule_slip = max(0, (cost_overrun_ratio - 1) * 18)
-        
+
         risk = compute_risk_score(
             cost_overrun_ratio=cost_overrun_ratio,
             schedule_slip_months=schedule_slip,
@@ -266,51 +279,52 @@ def get_sector_report(
             past_overrides=0,
             days_pending=0,
         )
-        
-        risk_distribution[risk.risk_category.value] += 1
+
+        risk_category = risk.risk_category.value
+        risk_distribution[risk_category] = risk_distribution.get(risk_category, 0) + 1
         total_risk += risk.composite_score
-        
+
         dcs = compute_dcs(
             has_revised_cost=revised > 0,
-            has_expenditure=project.get("expenditure", 0) > 0,
-            has_physical_progress=project.get("physical_progress") is not None,
-            has_planned_completion=bool(project.get("planned_completion")),
-            has_narrative=bool(project.get("narrative_text")),
+            has_expenditure=expenditure > 0,
+            has_physical_progress=progress is not None,
+            has_planned_completion=bool(latest_submission and latest_submission.planned_completion),
+            has_narrative=bool(latest_submission and latest_submission.narrative_text),
             reporting_lag_days=14,
-            expenditure=project.get("expenditure", 0),
+            expenditure=expenditure,
             revised_cost=revised,
-            physical_progress=project.get("physical_progress"),
+            physical_progress=progress,
             agency_track_record=None,
             submission_count=6,
         )
         total_dcs += dcs.dcs_score
-        
-        expenditure_ratio = project.get("expenditure", 0) / revised if revised > 0 else 0
+
+        expenditure_ratio = expenditure / revised if revised > 0 else 0
         anomalies = detect_all_anomalies(
             expenditure_ratio=expenditure_ratio,
-            physical_progress_pct=project.get("physical_progress", 0),
-            monthly_progress_rate=project.get("physical_progress", 0) / 12 if project.get("physical_progress") else 0,
+            physical_progress_pct=progress or 0,
+            monthly_progress_rate=(progress or 0) / 12,
             rcf_median_monthly_rate=5.0,
             current_revised_cost=revised,
             previous_revised_cost=sanctioned,
-            milestone_shift_count=0,
-            total_shift_months=0,
+            milestone_shift_count=max(0, int((cost_overrun_ratio - 1) * 10)),
+            total_shift_months=max(0, (cost_overrun_ratio - 1) * 18),
             reporting_period=reporting_period,
         )
         total_anomalies += len(anomalies)
-    
+
     average_risk = total_risk / project_count if project_count > 0 else 0
     average_dcs = total_dcs / project_count if project_count > 0 else 0
-    
-    high_risk_projects = [
-        {
-            "project_id": p["project_id"],
-            "project_name": p["project_name"],
-            "risk_score": 75.0,  # Mock value
-        }
-        for p in sector_projects[:5]
-    ]
-    
+
+    high_risk_projects = []
+    sorted_projects = sorted(projects, key=lambda p: _project_latest_composite(db, p.project_id), reverse=True)
+    for p in sorted_projects[:5]:
+        high_risk_projects.append({
+            "project_id": str(p.project_id),
+            "project_name": p.project_name or f"Project {p.project_id}",
+            "risk_score": _project_latest_composite(db, p.project_id),
+        })
+
     metadata = _create_report_metadata(
         report_type="sector",
         user=user,
@@ -318,9 +332,9 @@ def get_sector_report(
         reporting_period=reporting_period,
         model_version="xgb-exp-v1",
     )
-    
+
     _reports_db.append(metadata)
-    
+
     return SectorStateReportResponse(
         metadata=metadata,
         sector_or_state=sector,
@@ -330,8 +344,15 @@ def get_sector_report(
         average_dcs=round(average_dcs, 2),
         anomalies=total_anomalies,
         high_risk_projects=high_risk_projects,
-        trend=[],  # Would be populated from historical data
+        trend=[],
     )
+
+
+def _project_latest_composite(db: Session, project_id: str) -> float:
+    latest_risk = db.query(RiskScore).filter(
+        RiskScore.project_id == project_id
+    ).order_by(RiskScore.reporting_month.desc()).first()
+    return float(latest_risk.composite_score) if latest_risk else 50.0
 
 
 @router.get("/reports/state/{state}", response_model=SectorStateReportResponse)
@@ -339,47 +360,58 @@ def get_state_report(
     state: str,
     user: Any = Depends(get_current_user),
     reporting_period: str = Query("2026-03"),
+    db: Session = Depends(get_db),
 ):
     """Generate state-specific risk report."""
     # Similar to sector report but filtered by state
-    return get_sector_report(state, user, reporting_period)
+    return get_sector_report(state, user, reporting_period, db)
 
 
 @router.get("/reports/governance", response_model=GovernanceReportResponse)
 def get_governance_report(
     user: Any = Depends(get_current_user),
     reporting_period: str = Query("2026-03"),
+    db: Session = Depends(get_db),
 ):
-    """Generate governance report."""
-    
-    projects = load_projects()
-    
+    """Generate governance report from PostgreSQL."""
+    projects = db.query(Project).all()
+
     high_risk_count = 0
     very_high_count = 0
     critical_count = 0
-    
+
     for project in projects:
-        sanctioned = project["sanctioned_cost"]
-        revised = project.get("revised_cost", sanctioned)
-        cost_overrun_ratio = revised / sanctioned if sanctioned > 0 else 1.0
-        schedule_slip = max(0, (cost_overrun_ratio - 1) * 18)
-        
-        risk = compute_risk_score(
-            cost_overrun_ratio=cost_overrun_ratio,
-            schedule_slip_months=schedule_slip,
-            planned_duration_months=36,
-            anomaly_count=0,
-            max_severity_ordinal=0,
-            has_pending_review=False,
-            past_overrides=0,
-            days_pending=0,
-        )
-        
-        if risk.risk_category.value == "HIGH":
+        latest_risk = db.query(RiskScore).filter(
+            RiskScore.project_id == project.project_id
+        ).order_by(RiskScore.reporting_month.desc()).first()
+
+        if latest_risk:
+            risk_category = latest_risk.risk_category
+        else:
+            sanctioned = float(project.sanctioned_cost) if project.sanctioned_cost else 0
+            latest_submission = db.query(CUFSubmission).filter(
+                CUFSubmission.project_id == project.project_id
+            ).order_by(CUFSubmission.reporting_month.desc()).first()
+            revised = float(latest_submission.revised_cost) if latest_submission and latest_submission.revised_cost else sanctioned
+            cost_overrun_ratio = revised / sanctioned if sanctioned > 0 else 1.0
+            schedule_slip = max(0, (cost_overrun_ratio - 1) * 18)
+            risk = compute_risk_score(
+                cost_overrun_ratio=cost_overrun_ratio,
+                schedule_slip_months=schedule_slip,
+                planned_duration_months=36,
+                anomaly_count=0,
+                max_severity_ordinal=0,
+                has_pending_review=False,
+                past_overrides=0,
+                days_pending=0,
+            )
+            risk_category = risk.risk_category.value
+
+        if risk_category == "HIGH":
             high_risk_count += 1
-        elif risk.risk_category.value == "VERY_HIGH":
+        elif risk_category == "VERY_HIGH":
             very_high_count += 1
-        elif risk.risk_category.value == "CRITICAL":
+        elif risk_category == "CRITICAL":
             critical_count += 1
     
     total_reviews = high_risk_count + very_high_count + critical_count

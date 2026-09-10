@@ -42,6 +42,21 @@ export default function ModelLimitations() {
       category: 'AUDIT INTEGRATION',
       status: 'NOT AVAILABLE',
       description: 'Simulation audit records are not currently available.'
+    },
+    {
+      category: 'CALIBRATION',
+      status: 'NOT IMPLEMENTED',
+      description: 'ML v2 models are uncalibrated. Probabilities may not be well-calibrated. Use ranking (ROC-AUC) not absolute probabilities.'
+    },
+    {
+      category: 'TEMPORAL VALIDATION',
+      status: 'PARTIAL',
+      description: 'Schedule v2 model uses stratified split (not temporal) to fix label shift. May have some temporal leakage.'
+    },
+    {
+      category: 'GEOGRAPHIC BIAS',
+      status: 'MODERATE',
+      description: 'Schedule v2 model dominated by state features. May not generalize well to new states.'
     }
   ];
 

@@ -4,7 +4,7 @@ import psycopg
 try:
     conn = psycopg.connect(
         host="localhost",
-        port=5432,
+        port=5435,
         user="paimana",
         dbname="paimana_ai"
     )
@@ -15,7 +15,7 @@ except Exception as e:
 
 try:
     from sqlalchemy import create_engine, text
-    engine = create_engine("postgresql+psycopg://paimana@localhost:5432/paimana_ai")
+    engine = create_engine("postgresql+psycopg://paimana@localhost:5435/paimana_ai")
     with engine.connect() as conn:
         result = conn.execute(text("SELECT 1"))
         print(f"SQLALCHEMY CONNECTION (NO PASSWORD): OK - {result.scalar()}")

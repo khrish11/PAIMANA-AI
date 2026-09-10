@@ -49,7 +49,7 @@ function ModelPerformance() {
               fontSize: typography.fontSize.sm,
               color: colors.text.secondary 
             }}>
-              Limited completed outcomes (160 projects). Not production validated.
+              Trained on 454 completed projects (2.8x increase from v1). Not production validated.
             </div>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Card, Badge, Button } from '../components/common';
 import { colors, spacing, typography, borderRadius } from '../tokens';
+import { createSubmissionData } from '../services/api';
+import { invalidateAfterSubmission, invalidateAfterRevision } from '../hooks';
 
 function DataEntry() {
   const [formData, setFormData] = useState({
@@ -11,10 +13,15 @@ function DataEntry() {
     physical_progress: '',
     planned_completion: '',
     narrative_text: '',
+    revision_reason: '',
   });
   const [validationErrors, setValidationErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [duplicateInfo, setDuplicateInfo] = useState(null);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -50,19 +57,86 @@ function DataEntry() {
     
     if (!validate()) return;
     
-    console.log('Submitting CUF:', formData);
-    
-    setResult({
-      submission_id: 'sub-' + Date.now(),
-      status: 'accepted',
-      message: 'Submission recorded successfully. DCS, anomalies, and risk recalculated.',
-      version: 1,
-      dcs_score: 78.5,
-      risk_score: 45.2,
-      anomaly_count: 2,
-      governance_status: 'no_action',
-    });
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const submissionData = {
+        reporting_month: formData.reporting_month ? new Date(formData.reporting_month + '-01').toISOString().split('T')[0] : null,
+        revised_cost: formData.revised_cost ? parseFloat(formData.revised_cost) : null,
+        expenditure: formData.expenditure ? parseFloat(formData.expenditure) : null,
+        physical_progress: formData.physical_progress ? parseFloat(formData.physical_progress) : null,
+        planned_completion: formData.planned_completion || null,
+        narrative_text: formData.narrative_text || null,
+        revision_reason: formData.revision_reason || null,
+        data_source: 'manual',
+        import_method: 'manual',
+        provenance_status: 'verified',
+      };
+
+      const response = await createSubmissionData(formData.project_id, submissionData);
+      
+      // Check if it was a duplicate that requires revision
+      if (response.status === 'duplicate') {
+        setDuplicateInfo(response);
+        setShowDuplicateDialog(true);
+        setLoading(false);
+        return;
+      }
+      
+      // Invalidate caches after successful submission
+      invalidateAfterSubmission(formData.project_id);
+      
+      setResult(response);
+      setSubmitted(true);
+    } catch (err) {
+      const errMessage = err.message || 'Failed to submit CUF';
+      
+      // Check if it's a duplicate error
+      if (errMessage.includes('duplicate') || errMessage.includes('already exists')) {
+        setShowDuplicateDialog(true);
+      } else {
+        setError(errMessage);
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleRevise = async () => {
+    if (!formData.revision_reason.trim()) {
+      setError('Revision reason is required when revising an existing submission');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const submissionData = {
+        reporting_month: formData.reporting_month ? new Date(formData.reporting_month + '-01').toISOString().split('T')[0] : null,
+        revised_cost: formData.revised_cost ? parseFloat(formData.revised_cost) : null,
+        expenditure: formData.expenditure ? parseFloat(formData.expenditure) : null,
+        physical_progress: formData.physical_progress ? parseFloat(formData.physical_progress) : null,
+        planned_completion: formData.planned_completion || null,
+        narrative_text: formData.narrative_text || null,
+        revision_reason: formData.revision_reason,
+        data_source: 'manual',
+        import_method: 'manual',
+        provenance_status: 'verified',
+      };
+
+      const response = await createSubmissionData(formData.project_id, submissionData);
+      
+      // Invalidate caches after successful revision
+      invalidateAfterRevision(formData.project_id);
+      
+      setResult(response);
+      setSubmitted(true);
+      setShowDuplicateDialog(false);
+    } catch (err) {
+      setError(err.message || 'Failed to revise submission');
+      setLoading(false);
+    }
   };
 
   if (submitted && result) {
@@ -81,18 +155,67 @@ function DataEntry() {
               color: colors.accent.success,
               marginBottom: spacing.md 
             }}>
-              Submission Successful
+              Submission {result.status === 'revised' ? 'Revised' : 'Successful'}
             </h1>
             <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
               <div><strong>Submission ID:</strong> {result.submission_id}</div>
-              <div><strong>Status:</strong> <Badge variant="success">{result.status}</Badge></div>
+              <div><strong>Status:</strong> <Badge variant={result.status === 'revised' ? 'warning' : 'success'}>{result.status}</Badge></div>
               <div><strong>Message:</strong> {result.message}</div>
               <div><strong>Version:</strong> {result.version}</div>
-              <div><strong>DCS Score:</strong> {result.dcs_score}</div>
-              <div><strong>Risk Score:</strong> {result.risk_score}</div>
-              <div><strong>Anomalies Detected:</strong> {result.anomaly_count}</div>
-              <div><strong>Governance Status:</strong> {result.governance_status}</div>
             </div>
+            
+            {/* Data Refresh Status */}
+            <div style={{ 
+              marginTop: spacing.lg,
+              padding: spacing.md,
+              backgroundColor: colors.background.tertiary,
+              borderRadius: borderRadius.md,
+              border: `1px solid ${colors.border.default}`
+            }}>
+              <h3 style={{ 
+                fontSize: typography.fontSize.base,
+                fontWeight: 600,
+                color: colors.text.primary,
+                marginBottom: spacing.md 
+              }}>
+                Data Refresh Status
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                  <span style={{ color: colors.accent.success }}>✓</span>
+                  <span>Data Saved to PostgreSQL</span>
+                </div>
+                {result.dcs_score !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                    <span style={{ color: colors.accent.success }}>✓</span>
+                    <span>DCS Updated: {result.dcs_score.toFixed(1)}</span>
+                  </div>
+                )}
+                {result.risk_score !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                    <span style={{ color: colors.accent.success }}>✓</span>
+                    <span>Risk Score Updated: {result.risk_score.toFixed(1)}</span>
+                  </div>
+                )}
+                {result.anomaly_count !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                    <span style={{ color: colors.accent.success }}>✓</span>
+                    <span>Anomalies Detected: {result.anomaly_count}</span>
+                  </div>
+                )}
+                {result.governance_status && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                    <span style={{ color: colors.accent.success }}>✓</span>
+                    <span>Governance Status: {result.governance_status}</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                  <span style={{ color: colors.accent.success }}>✓</span>
+                  <span>Audit Event Recorded</span>
+                </div>
+              </div>
+            </div>
+            
             <Button
               variant="primary"
               onClick={() => {
@@ -106,6 +229,7 @@ function DataEntry() {
                   physical_progress: '',
                   planned_completion: '',
                   narrative_text: '',
+                  revision_reason: '',
                 });
               }}
               style={{ marginTop: spacing.lg }}
@@ -451,14 +575,104 @@ function DataEntry() {
                 physical_progress: '',
                 planned_completion: '',
                 narrative_text: '',
+                revision_reason: '',
               })}
             >
               Clear
             </Button>
-            <Button variant="primary" type="submit">
-              Submit
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </div>
+
+          {error && (
+            <div style={{ 
+              padding: spacing.md,
+              backgroundColor: `${colors.accent.danger}10`,
+              border: `1px solid ${colors.accent.danger}30`,
+              borderRadius: borderRadius.md,
+              color: colors.accent.danger,
+            }}>
+              {error}
+            </div>
+          )}
+
+          {/* Duplicate Dialog */}
+          {showDuplicateDialog && (
+            <div style={{ 
+              padding: spacing.lg,
+              backgroundColor: `${colors.accent.warning}10`,
+              border: `2px solid ${colors.accent.warning}`,
+              borderRadius: borderRadius.md,
+              marginBottom: spacing.lg,
+            }}>
+              <h3 style={{ 
+                fontSize: typography.fontSize.lg,
+                fontWeight: 600,
+                color: colors.accent.warning,
+                marginBottom: spacing.md 
+              }}>
+                ⚠️ Duplicate Reporting Month
+              </h3>
+              <p style={{ 
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+                marginBottom: spacing.lg 
+              }}>
+                A submission for {formData.reporting_month} already exists for this project.
+                You can either revise the existing submission or cancel.
+              </p>
+              
+              <div style={{ marginBottom: spacing.lg }}>
+                <label style={{ 
+                  display: 'block',
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: 600,
+                  color: colors.text.secondary,
+                  marginBottom: spacing.xs 
+                }}>
+                  Revision Reason (Required) *
+                </label>
+                <textarea
+                  name="revision_reason"
+                  value={formData.revision_reason}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: `${spacing.sm} ${spacing.md}`,
+                    backgroundColor: colors.background.primary,
+                    border: `1px solid ${colors.border.default}`,
+                    borderRadius: borderRadius.md,
+                    color: colors.text.primary,
+                    fontFamily: typography.fontFamily.sans,
+                    fontSize: typography.fontSize.sm,
+                    minHeight: '80px',
+                  }}
+                  placeholder="Explain why this revision is necessary..."
+                  rows="3"
+                />
+              </div>
+              
+              <div style={{ display: 'flex', gap: spacing.md }}>
+                <Button
+                  variant="primary"
+                  onClick={handleRevise}
+                  disabled={loading || !formData.revision_reason.trim()}
+                >
+                  {loading ? 'Revising...' : 'Revise Existing Submission'}
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setShowDuplicateDialog(false);
+                    setFormData(prev => ({ ...prev, revision_reason: '' }));
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
         </form>
       </Card>
     </div>

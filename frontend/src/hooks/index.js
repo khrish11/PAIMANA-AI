@@ -9,3 +9,14 @@ export { useCounterfactual } from './useCounterfactual';
 export { useProjectIntelligence } from './useProjectIntelligence';
 export { useNetworkIntelligence } from './useNetworkIntelligence';
 export { usePositiveDeviance } from './usePositiveDeviance';
+export { 
+  registerCacheInvalidator, 
+  invalidateCache, 
+  invalidateCaches, 
+  subscribeToInvalidations,
+  invalidateAfterProjectCreation,
+  invalidateAfterSubmission,
+  invalidateAfterBulkImport,
+  invalidateAfterRevision,
+  CACHE_KEYS 
+} from './useCacheInvalidation';

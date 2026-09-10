@@ -1,6 +1,0 @@
-project_id,reporting_month,predicted_probability,predicted_class,actual_label,model_version
-618188,2026-07,0.9291495598623621,1,1,lightgbm-exp-v1
-618704,2026-07,0.44509796951831077,0,0,lightgbm-exp-v1
-618164,2026-07,0.12847204861883746,0,0,lightgbm-exp-v1
-612851,2026-07,0.7075539517853348,1,0,lightgbm-exp-v1
-705567,2026-07,0.6404120032287385,1,1,lightgbm-exp-v1

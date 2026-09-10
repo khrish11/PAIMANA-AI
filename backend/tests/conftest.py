@@ -4,6 +4,11 @@ Pytest configuration for PAIMANA-AI backend tests.
 Defines markers for different test categories.
 """
 import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
+
+from app.main import app
+from app.db.session import SessionLocal
 
 
 def pytest_configure(config):
@@ -17,3 +22,19 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "integration: marks tests as integration tests"
     )
+
+
+@pytest.fixture
+def db():
+    """Create a database session for testing."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@pytest.fixture
+def client():
+    """Create a test client for API testing."""
+    return TestClient(app)

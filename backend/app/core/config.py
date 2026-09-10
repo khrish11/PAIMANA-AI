@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     data_dir: str = Field(default="data", alias="DATA_DIR")
     database_url: str = Field(
-        default="postgresql+psycopg://paimana:paimana_dev_password@localhost:5432/paimana_ai",
+        default="postgresql+psycopg://paimana:paimana_dev_password@localhost:5435/paimana_ai",
         alias="DATABASE_URL",
     )
     redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")

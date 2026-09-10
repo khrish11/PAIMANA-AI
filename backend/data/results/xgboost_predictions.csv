@@ -1,6 +1,0 @@
-project_id,reporting_month,predicted_probability,predicted_class,actual_label,model_version
-618188,2026-07,0.9765121936798096,1,1,xgboost-exp-v1
-618704,2026-07,0.1717004030942917,0,0,xgboost-exp-v1
-618164,2026-07,0.049667682498693466,0,0,xgboost-exp-v1
-612851,2026-07,0.4967295825481415,0,0,xgboost-exp-v1
-705567,2026-07,0.6340065598487854,1,1,xgboost-exp-v1

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProjects } from '../services/api';
+import { getProjects, getDashboardStats } from '../services/api';
 import { Card, Badge, Button, DataTable, LoadingState, EmptyState } from '../components/common';
 import { KPICard } from '../components/domain';
 import { colors, spacing, typography, borderRadius } from '../tokens';
@@ -8,6 +8,7 @@ import { colors, spacing, typography, borderRadius } from '../tokens';
 function DataManagement() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
@@ -20,8 +21,12 @@ function DataManagement() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getProjects(filters);
-        setData(response);
+        const [projectsResponse, statsResponse] = await Promise.all([
+          getProjects(filters),
+          getDashboardStats(),
+        ]);
+        setData(projectsResponse);
+        setStats(statsResponse);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -126,25 +131,54 @@ function DataManagement() {
       }}>
         <KPICard
           label="Total Projects"
-          value={data.projects.length}
+          value={stats?.total_projects || 0}
           icon="🏗️"
         />
         <KPICard
           label="Monthly Submissions"
-          value={data.projects.length * 6}
+          value={stats?.total_submissions || 0}
           icon="📊"
         />
         <KPICard
-          label="Projects Requiring Update"
-          value={projectsRequiringUpdate}
-          icon="⚠️"
+          label="New This Month"
+          value={(stats?.new_projects_this_month || 0) + (stats?.new_submissions_this_month || 0)}
+          icon="🆕"
           trendDirection="up"
         />
         <KPICard
-          label="Low-DCS Projects"
-          value={lowDcsProjects}
-          icon="🚨"
+          label="Revised Submissions"
+          value={stats?.revised_submissions || 0}
+          icon="🔄"
           trendDirection="up"
+        />
+      </div>
+
+      {/* Additional Stats Row */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(4, 1fr)', 
+        gap: spacing.md 
+      }}>
+        <KPICard
+          label="Latest Reporting Month"
+          value={stats?.latest_reporting_month || 'N/A'}
+          icon="📅"
+        />
+        <KPICard
+          label="Validation Failures"
+          value={stats?.validation_failures || 0}
+          icon="❌"
+          trendDirection="down"
+        />
+        <KPICard
+          label="Pending Refresh Jobs"
+          value={stats?.pending_refresh_jobs || 0}
+          icon="⏳"
+        />
+        <KPICard
+          label="Last Import"
+          value={stats?.last_successful_import?.batch_name || 'None'}
+          icon="📥"
         />
       </div>
 

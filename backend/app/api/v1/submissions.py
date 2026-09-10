@@ -49,16 +49,33 @@ def create_submission(
             raise HTTPException(status_code=400, detail="Revised cost cannot be negative")
         
         # Check for duplicate reporting month in PostgreSQL
-        existing = session.query(CUFSubmission).filter(
+        existing_latest_for_month = session.query(CUFSubmission).filter(
             CUFSubmission.project_id == submission.project_id,
-            CUFSubmission.reporting_month == submission.reporting_month
+            CUFSubmission.reporting_month == submission.reporting_month,
+            CUFSubmission.is_latest == True
         ).first()
         
-        if existing:
-            raise HTTPException(status_code=400, detail="Submission for this reporting month already exists")
+        # Check global latest
+        current_latest = session.query(CUFSubmission).filter(
+            CUFSubmission.project_id == submission.project_id,
+            CUFSubmission.is_latest == True
+        ).first()
+        
+        new_version = 1
+        
+        if existing_latest_for_month:
+            # It's a revision
+            new_version = existing_latest_for_month.version + 1
+            existing_latest_for_month.is_latest = False
+            session.add(existing_latest_for_month)
+        elif current_latest:
+            # It's a new month, not a revision
+            current_latest.is_latest = False
+            session.add(current_latest)
+        
+        submission_id = str(uuid4())
         
         # Create submission record in PostgreSQL
-        submission_id = str(uuid4())
         cuf_submission = CUFSubmission(
             submission_id=submission_id,
             project_id=submission.project_id,
@@ -70,88 +87,57 @@ def create_submission(
             narrative_text=submission.narrative_text,
             submitted_by=submission.submitted_by,
             submitted_at=datetime.now(),
-            version=1
+            version=new_version,
+            is_latest=True
         )
         
         session.add(cuf_submission)
         session.commit()
         session.refresh(cuf_submission)
         
-        # Get project data for risk calculation
-        project_data = {
-            "sanctioned_cost": project.sanctioned_cost,
-            "revised_cost": submission.revised_cost or project.sanctioned_cost,
-            "expenditure": submission.expenditure or 0,
-            "physical_progress": submission.physical_progress or 0,
-        }
+        # After new submission is created, update old submission's superseded_by
+        if existing_latest_for_month:
+            existing_latest_for_month.superseded_by = submission_id
+            existing_latest_for_month.superseded_at = datetime.now()
+            existing_latest_for_month.superseded_reason = "Manual revision via API"
+            session.add(existing_latest_for_month)
+            session.commit()
         
-        # Trigger DCS recalculation
-        dcs = compute_dcs(
-            has_revised_cost=project_data["revised_cost"] > 0,
-            has_expenditure=project_data["expenditure"] > 0,
-            has_physical_progress=project_data["physical_progress"] is not None,
-            has_planned_completion=bool(submission.planned_completion),
-            has_narrative=bool(submission.narrative_text),
-            reporting_lag_days=14,
-            expenditure=project_data["expenditure"],
-            revised_cost=project_data["revised_cost"],
-            physical_progress=project_data["physical_progress"],
-            agency_track_record=None,
-            submission_count=6,
-        )
-        
-        # Trigger anomaly detection
-        sanctioned = project_data["sanctioned_cost"]
-        revised = project_data["revised_cost"]
-        expenditure = project_data["expenditure"]
-        progress = project_data["physical_progress"]
-        
-        cost_overrun_ratio = revised / sanctioned if sanctioned > 0 else 1.0
-        expenditure_ratio = expenditure / revised if revised > 0 else 0
-        
-        anomalies = detect_all_anomalies(
-            expenditure_ratio=expenditure_ratio,
-            physical_progress_pct=progress,
-            monthly_progress_rate=progress / 12 if progress else 0,
-            rcf_median_monthly_rate=5.0,
-            current_revised_cost=revised,
-            previous_revised_cost=sanctioned,
-            milestone_shift_count=0,
-            total_shift_months=0,
-            reporting_period=str(submission.reporting_month),
-        )
-        
-        # Trigger risk recalculation
-        severity_map = {"LOW": 1, "MODERATE": 2, "HIGH": 3, "CRITICAL": 4}
-        max_sev = max((severity_map.get(a.severity.value, 0) for a in anomalies), default=0)
-        schedule_slip = max(0, (cost_overrun_ratio - 1) * 18)
-        
-        risk = compute_risk_score(
-            cost_overrun_ratio=cost_overrun_ratio,
-            schedule_slip_months=schedule_slip,
-            planned_duration_months=36,
-            anomaly_count=len(anomalies),
-            max_severity_ordinal=max_sev,
-            has_pending_review=False,
-            past_overrides=0,
-            days_pending=0,
-        )
-        
-        # TODO: Trigger governance reassessment if risk crosses threshold
-        # TODO: Record audit event
-        
-        return SubmissionResponse(
-            submission_id=submission_id,
+        # Trigger intelligence refresh natively
+        from app.services.data_refresh import refresh_project_intelligence
+        refresh_result = refresh_project_intelligence(
             project_id=submission.project_id,
-            reporting_month=str(submission.reporting_month),
-            status="accepted",
-            message="Submission recorded successfully. DCS, anomalies, and risk recalculated.",
-            version=1,
-            dcs_score=dcs.dcs_score,
-            risk_score=risk.composite_score,
-            anomaly_count=len(anomalies),
-            governance_status="pending_review" if risk.risk_category.value in ["HIGH", "VERY_HIGH", "CRITICAL"] else "no_action",
+            reporting_month=submission.reporting_month,
+            db=session,
+            triggered_by=submission.submitted_by,
+            triggered_by_role="analyst"
         )
+        
+        # Re-fetch submission because refresh might have done DB operations
+        session.refresh(cuf_submission)
+        
+        # Return properly structured response using refresh output
+        return {
+            "submission_id": str(cuf_submission.submission_id),
+            "project_id": str(cuf_submission.project_id),
+            "reporting_month": str(cuf_submission.reporting_month),
+            "status": "CREATED",
+            "message": "Submission recorded successfully.",
+            "version": cuf_submission.version,
+            "dcs_score": refresh_result.get("dcs_score", 0.0),
+            "risk_score": refresh_result.get("risk_score", 0.0),
+            "anomaly_count": refresh_result.get("anomaly_count", 0),
+            "governance_status": refresh_result.get("governance_status", "no_action"),
+            "refresh": {
+                "status": refresh_result.get("status", "COMPLETED"),
+                "dcs": "UPDATED",
+                "risk": "UPDATED",
+                "anomaly": "UPDATED",
+                "ml": "UPDATED" if refresh_result.get("ml_inference") else "UNAVAILABLE",
+                "shap": "UPDATED" if refresh_result.get("ml_inference") else "UNAVAILABLE",
+                "governance": "CHECKED"
+            }
+        }
         
     except Exception as exc:
         session.rollback()

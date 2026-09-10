@@ -26,6 +26,7 @@ import PeerIntelligence from './pages/PeerIntelligence';
 import ProjectIntelligence from './pages/ProjectIntelligence';
 import PositiveDeviance from './pages/PositiveDeviance';
 import PlaybookLibrary from './pages/PlaybookLibrary';
+import EarlyWarningDashboard from './pages/EarlyWarningDashboard';
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout title="Overview"><NationalRiskMap /></Layout>} />
         <Route path="/risk-intelligence" element={<Layout title="Risk Intelligence"><RiskIntelligence /></Layout>} />
+        <Route path="/early-warning" element={<Layout title="Early Warning Dashboard"><EarlyWarningDashboard /></Layout>} />
         <Route path="/projects" element={<Layout title="Projects"><ProjectList /></Layout>} />
         <Route path="/projects/:id" element={<Layout title="Project Detail"><ProjectDetail /></Layout>} />
         <Route path="/projects/:id/history" element={<Layout title="Version History"><VersionHistory /></Layout>} />

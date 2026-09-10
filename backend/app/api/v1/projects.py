@@ -44,8 +44,7 @@ from app.schemas.schemas import (
 )
 from app.services.anomaly_detection import detect_all_anomalies
 from app.services.data_confidence import compute_dcs
-from app.services.ml_inference import get_inference_service
-from app.services.model_loader import get_model_loader
+from app.services.production_ml_inference import get_ml_inference_service
 from app.services.nid_service import run_nid
 from app.services.pbe_service import compute_pbe
 from app.services.rcf_engine import fit_reference_class, size_band_for_cost
@@ -210,103 +209,87 @@ def get_project_risk(
         reporting_period=str(latest_submission.reporting_month) if latest_submission and latest_submission.reporting_month else "2026-03",
     )
 
-    # Real ML inference using trained models
-    ml_inference = None
-    ml_status = "unavailable"
-    
-    try:
-        from app.services.model_inference import get_inference_service
-        inference_service = get_inference_service()
-        
-        if inference_service:
-            # Prepare project data for ML inference
-            project_data = {
-                'sanctioned_cost': float(sanctioned),
-                'revised_cost': float(revised),
-                'expenditure': float(expenditure) if expenditure else 0.0,
-                'physical_progress': float(progress) if progress else 0.0
-            }
-            
-            # Try XGBoost first (preferred for SHAP support)
-            ml_inference = inference_service.predict('xgboost', project_data)
-            
-            if ml_inference and ml_inference.get('status') == 'success':
-                ml_status = "success"
-            else:
-                # Fallback to Random Forest
-                ml_inference = inference_service.predict('random_forest', project_data)
-                if ml_inference and ml_inference.get('status') == 'success':
-                    ml_status = "success"
-                else:
-                    ml_status = "unavailable"
-                    ml_inference = {
-                        'status': 'unavailable',
-                        'error': 'ML inference unavailable - models failed to predict'
-                    }
-    except Exception as e:
-        logger.error(f"ML inference failed: {e}")
-        ml_status = "error"
-        ml_inference = {
-            'status': 'error',
-            'error': str(e)
-        }
-
-    # SHAP (real SHAP for XGBoost, unavailable for RF)
+    # Production ML inference using trained v2 models with proper feature engineering
+    ml_cost_risk = None
+    ml_schedule_risk = None
+    ml_cost_probability = None
+    ml_schedule_probability = None
+    ml_model_version = None
+    ml_model_status = "unavailable"
     shap_drivers = None
     shap_method = "unavailable"
     shap_status = "unavailable"
     
-    if ml_status == "success" and ml_inference.get('model_type') == 'xgboost':
-        try:
-            import shap
-            from app.services.model_loader import get_model_loader
-            model_loader = get_model_loader()
-            model_info = model_loader.get_model('xgboost')
+    try:
+        ml_service = get_ml_inference_service()
+        
+        if ml_service.is_available():
+            # Prepare project and submission data for ML inference
+            project_data = {
+                'project_id': project.project_id,
+                'sector': project.sector,
+                'state': project.state,
+                'sanctioned_cost': float(sanctioned),
+                'approved_date': project.approved_date.isoformat() if project.approved_date else None,
+            }
             
-            if model_info and model_info.get('loaded'):
-                model = model_info['model']
-                explainer = shap.TreeExplainer(model)
+            submission_data = {
+                'revised_cost': float(revised),
+                'expenditure': float(expenditure) if expenditure else 0.0,
+                'physical_progress': float(progress) if progress else 0.0,
+                'planned_completion': latest_submission.planned_completion.isoformat() if latest_submission and latest_submission.planned_completion else None,
+            }
+            
+            # Predict cost risk using XGBoost v2
+            cost_result = ml_service.predict_cost_risk(project_data, submission_data, use_shap=True)
+            
+            if cost_result.status == "success":
+                ml_cost_probability = cost_result.probability
+                ml_cost_risk = cost_result.probability * 100  # Convert to 0-100 scale
+                ml_model_version = cost_result.model_version
+                ml_model_status = "success"
                 
-                # Prepare features for SHAP
-                feature_names = inference_service.feature_names
-                feature_values = [
-                    project_data.get('sanctioned_cost', 0),
-                    project_data.get('revised_cost', project_data.get('sanctioned_cost', 0)),
-                    project_data.get('expenditure', 0),
-                    project_data.get('physical_progress', 0)
-                ]
-                features = np.array(feature_values).reshape(1, -1)
-                
-                shap_values = explainer.shap_values(features)
-                
-                # Get top 5 drivers
-                if len(shap_values) > 0:
-                    shap_array = shap_values[0] if isinstance(shap_values, list) else shap_values
-                    abs_shap = np.abs(shap_array[0])
-                    top_indices = np.argsort(abs_shap)[-5:][::-1]
-                    
-                    shap_drivers = []
-                    for idx in top_indices:
-                        feature_name = feature_names[idx]
-                        feature_value = feature_values[idx]
-                        shap_value = shap_array[0][idx]
-                        direction = "increases_risk" if shap_value > 0 else "decreases_risk"
-                        
-                        shap_drivers.append({
-                            "feature_name": feature_name,
-                            "human_label": feature_name.replace('_', ' ').title(),
-                            "feature_value": float(feature_value),
-                            "contribution": float(shap_value),
-                            "direction": direction,
-                            "explanation": f"{feature_name} value of {feature_value:.2f} {'increases' if shap_value > 0 else 'decreases'} the predicted risk by {abs(shap_value):.2f}."
-                        })
-                    
+                # Use SHAP drivers from cost prediction
+                if cost_result.shap_drivers:
+                    shap_drivers = [
+                        {
+                            "feature_name": driver["feature"],
+                            "human_label": driver["feature"].replace("_", " ").title(),
+                            "feature_value": driver["value"],
+                            "contribution": driver["contribution"],
+                            "direction": driver["direction"],
+                            "explanation": f"{driver['feature']} {'increases' if driver['direction'] == 'increases_risk' else 'decreases'} cost overrun risk by {abs(driver['contribution']):.3f}."
+                        }
+                        for driver in cost_result.shap_drivers
+                    ]
                     shap_method = "real_shap"
                     shap_status = "success"
-        except Exception as e:
-            logger.error(f"SHAP calculation failed: {e}")
-            shap_status = "error"
-            shap_method = "unavailable"
+            else:
+                logger.warning(f"Cost prediction failed: {cost_result.error}")
+                ml_model_status = cost_result.status
+            
+            # Predict schedule risk using LightGBM v2
+            schedule_result = ml_service.predict_schedule_risk(project_data, submission_data, use_shap=False)
+            
+            if schedule_result.status == "success":
+                ml_schedule_probability = schedule_result.probability
+                ml_schedule_risk = schedule_result.probability * 100  # Convert to 0-100 scale
+                if ml_model_status != "success":
+                    ml_model_status = "partial"
+                    ml_model_version = schedule_result.model_version
+            else:
+                logger.warning(f"Schedule prediction failed: {schedule_result.error}")
+                if ml_model_status == "success":
+                    ml_model_status = "partial"
+                elif ml_model_status == "unavailable":
+                    ml_model_status = schedule_result.status
+        else:
+            logger.warning("ML inference service not available")
+            ml_model_status = "unavailable"
+            
+    except Exception as e:
+        logger.error(f"ML inference failed: {e}")
+        ml_model_status = "error"
     
     # Fallback to rule-based SHAP only if real SHAP unavailable
     if shap_status != "success":
@@ -366,10 +349,10 @@ def get_project_risk(
             ],
             method=shap_method,
             status=shap_status,
-            model_type=ml_inference.get('model_type') if ml_inference else None,
-            model_status=ml_inference.get('model_status') if ml_inference else None,
-            predicted_probability=ml_inference.get('predicted_probability') if ml_inference else None,
-            predicted_class=ml_inference.get('predicted_class') if ml_inference else None,
+            model_type="xgboost_cost_v2",
+            model_status=ml_model_status,
+            predicted_probability=ml_cost_probability,
+            predicted_class=1 if ml_cost_probability and ml_cost_probability > 0.5 else 0,
         ),
         anomalies=[
             AnomalyItem(
@@ -386,10 +369,10 @@ def get_project_risk(
         calibration=CalibrationMetadata(
             threshold_version="v1",
             weights={"cost": 0.4, "schedule": 0.3, "progress": 0.2, "governance": 0.1},
-            thresholds={"LOW": 30, "MODERATE": 50, "HIGH": 70, "VERY_HIGH": 85, "CRITICAL": 95},
+            thresholds={"LONG": 30, "MODERATE": 50, "HIGH": 70, "VERY_HIGH": 85, "CRITICAL": 95},
         ),
-        ml_model_status="experimental",
-        ml_model_version=None,
+        ml_model_status=ml_model_status,
+        ml_model_version=ml_model_version,
     )
 
 
@@ -608,22 +591,87 @@ def get_project_trend(
         return RiskTrendResponse(
             project_id=project_id,
             trend=[],
-            data_source="postgresql",
         )
 
     trend = []
     for rs in risk_scores:
         trend.append(RiskTrendPoint(
-            reporting_month=rs.reporting_month,
+            reporting_month=str(rs.reporting_month),
             composite_score=float(rs.composite_score),
             cost_risk=float(rs.cost_risk),
             schedule_risk=float(rs.schedule_risk),
-            progress_anomaly_score=float(rs.progress_anomaly_score),
-            governance_risk=float(rs.governance_risk),
+            dcs_score=float(rs.data_confidence_score) if rs.data_confidence_score else 0.0,
+            anomaly_score=float(rs.progress_anomaly_score),
         ))
 
     return RiskTrendResponse(
         project_id=project_id,
         trend=trend,
-        data_source="postgresql",
     )
+
+
+@router.get("/{project_id}", response_model=ProjectResponse)
+def get_project_detail(
+    project_id: str,
+    user: Any = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Get project details."""
+    p = db.query(Project).filter(Project.project_id == project_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    return ProjectResponse(
+        project_id=str(p.project_id),
+        project_name=p.project_name or f"Project {p.project_id}",
+        project_code=p.project_code,
+        ministry=p.ministry,
+        sector=p.sector,
+        department=p.department,
+        state=p.state,
+        implementing_agency=p.implementing_agency or "Unknown",
+        sanctioned_cost=float(p.sanctioned_cost),
+        approved_date=p.approved_date.isoformat() if p.approved_date else None,
+        original_completion_date=p.original_completion_date.isoformat() if p.original_completion_date else None,
+        revised_completion_date=p.revised_completion_date.isoformat() if p.revised_completion_date else None,
+        status=p.status,
+        created_at=p.created_at.isoformat() if p.created_at else None,
+        updated_at=p.updated_at.isoformat() if p.updated_at else None,
+    )
+
+
+@router.get("/{project_id}/history")
+def get_project_history(
+    project_id: str,
+    user: Any = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Get complete submission history for a project."""
+    p = db.query(Project).filter(Project.project_id == project_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    submissions = db.query(CUFSubmission).filter(
+        CUFSubmission.project_id == project_id
+    ).order_by(
+        CUFSubmission.reporting_month.asc(),
+        CUFSubmission.version.asc()
+    ).all()
+
+    history = []
+    for s in submissions:
+        history.append({
+            "submission_id": str(s.submission_id),
+            "project_id": str(s.project_id),
+            "reporting_month": str(s.reporting_month),
+            "version": s.version,
+            "is_latest": s.is_latest,
+            "submitted_at": s.submitted_at.isoformat() if s.submitted_at else None,
+            "physical_progress": float(s.physical_progress) if s.physical_progress is not None else None,
+            "expenditure": float(s.expenditure) if s.expenditure is not None else None,
+            "revised_cost": float(s.revised_cost) if s.revised_cost is not None else None,
+            "superseded_by": str(s.superseded_by) if s.superseded_by else None,
+            "superseded_reason": s.superseded_reason,
+        })
+
+    return {"history": history}

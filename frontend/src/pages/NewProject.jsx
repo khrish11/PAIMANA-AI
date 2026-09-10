@@ -1,32 +1,35 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createProjectData } from '../services/api';
+import { invalidateAfterProjectCreation } from '../hooks';
 
 function NewProject() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     // Step 1: Project Information
-    project_id: '',
     project_name: '',
+    project_code: '',
     ministry: '',
     sector: '',
     state: '',
+    department: '',
     implementing_agency: '',
     // Step 2: Cost
     sanctioned_cost: '',
-    revised_cost: '',
     // Step 3: Schedule
-    approval_date: '',
+    approved_date: '',
     original_completion_date: '',
-    planned_completion_date: '',
-    actual_completion_date: '',
+    revised_completion_date: '',
     // Step 4: Initial Monitoring
     reporting_month: '',
     initial_expenditure: '',
     initial_physical_progress: '',
     initial_narrative: '',
     // Step 5: Status
-    status: 'ongoing',
+    status: 'ONGOING',
   });
 
   const handleChange = (e) => {
@@ -38,9 +41,37 @@ function NewProject() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Call API to create project
-    console.log('Creating project:', formData);
-    navigate('/data-management');
+    setLoading(true);
+    setError(null);
+
+    try {
+      const projectData = {
+        project_code: formData.project_code,
+        project_name: formData.project_name,
+        ministry: formData.ministry,
+        sector: formData.sector,
+        state: formData.state,
+        implementing_agency: formData.implementing_agency,
+        department: formData.department,
+        sanctioned_cost: formData.sanctioned_cost ? parseFloat(formData.sanctioned_cost) : null,
+        approved_date: formData.approved_date ? new Date(formData.approved_date).toISOString().split('T')[0] : null,
+        original_completion_date: formData.original_completion_date ? new Date(formData.original_completion_date).toISOString().split('T')[0] : null,
+        revised_completion_date: formData.revised_completion_date ? new Date(formData.revised_completion_date).toISOString().split('T')[0] : null,
+        data_source: 'manual',
+        import_method: 'manual',
+        provenance_status: 'verified',
+      };
+
+      const result = await createProjectData(projectData);
+      
+      // Invalidate caches
+      invalidateAfterProjectCreation();
+      
+      navigate('/data-management');
+    } catch (err) {
+      setError(err.message || 'Failed to create project');
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,6 +80,12 @@ function NewProject() {
         <h1 className="text-3xl font-bold text-gray-900">Create New Project</h1>
         <p className="text-gray-600 mt-2">Step {step} of 5</p>
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-red-800">{error}</p>
+        </div>
+      )}
 
       {/* Progress Bar */}
       <div className="mb-8">
@@ -74,14 +111,15 @@ function NewProject() {
             <h2 className="text-xl font-semibold mb-4">Project Information</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Project ID</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Project Code (Unique)</label>
                 <input
                   type="text"
-                  name="project_id"
-                  value={formData.project_id}
+                  name="project_code"
+                  value={formData.project_code}
                   onChange={handleChange}
                   className="w-full border rounded-md px-3 py-2"
                   required
+                  placeholder="e.g., P-2026-001"
                 />
               </div>
               <div>
@@ -93,6 +131,16 @@ function NewProject() {
                   onChange={handleChange}
                   className="w-full border rounded-md px-3 py-2"
                   required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                <input
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2"
                 />
               </div>
               <div>
@@ -178,17 +226,7 @@ function NewProject() {
                   className="w-full border rounded-md px-3 py-2"
                   required
                   min="0"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Revised Cost (₹ Crores)</label>
-                <input
-                  type="number"
-                  name="revised_cost"
-                  value={formData.revised_cost}
-                  onChange={handleChange}
-                  className="w-full border rounded-md px-3 py-2"
-                  min="0"
+                  step="0.01"
                 />
               </div>
             </div>
@@ -212,8 +250,8 @@ function NewProject() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Approval Date</label>
                 <input
                   type="date"
-                  name="approval_date"
-                  value={formData.approval_date}
+                  name="approved_date"
+                  value={formData.approved_date}
                   onChange={handleChange}
                   className="w-full border rounded-md px-3 py-2"
                   required
@@ -231,21 +269,11 @@ function NewProject() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Planned Completion Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Revised Completion Date</label>
                 <input
                   type="date"
-                  name="planned_completion_date"
-                  value={formData.planned_completion_date}
-                  onChange={handleChange}
-                  className="w-full border rounded-md px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Actual Completion Date (if known)</label>
-                <input
-                  type="date"
-                  name="actual_completion_date"
-                  value={formData.actual_completion_date}
+                  name="revised_completion_date"
+                  value={formData.revised_completion_date}
                   onChange={handleChange}
                   className="w-full border rounded-md px-3 py-2"
                 />
@@ -357,8 +385,8 @@ function NewProject() {
               <button type="button" onClick={prevStep} className="px-6 py-2 border rounded-md hover:bg-gray-50">
                 Previous
               </button>
-              <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                Create Project
+              <button type="submit" disabled={loading} className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400">
+                {loading ? 'Creating...' : 'Create Project'}
               </button>
             </div>
           </div>

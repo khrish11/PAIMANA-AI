@@ -1,5 +1,7 @@
 # PAIMANA-AI
 
+![Public Repository](https://img.shields.io/badge/status-public-success)
+
 AI-powered predictive analytics and early-warning system for infrastructure project monitoring, built for Smart India Hackathon 2026.
 
 This repository follows the SRS Section 14.1 layout exactly:
@@ -104,9 +106,10 @@ The PAIMANA AI system has completed comprehensive hardening and acceptance testi
 - [Final Acceptance Checklist](docs/final_acceptance_checklist.md) - 26/26 criteria passed
 
 **GitHub Repository:**
-- Repository: https://github.com/khrish11/PAIMANA-AI.git
-- Status: Successfully pushed (3,745 files, 114.71 MiB)
+- Repository: https://github.com/khrish11/PAIMANA-AI
+- Status: Public repository
 - Branch: main
+- License: See LICENSE file
 
 ## System Architecture
 
@@ -490,3 +493,19 @@ npm run build
 4. Increase ML training data (currently 160 completed projects)
 5. Integrate narrative data when available (currently 0% coverage)
 6. Implement real risk propagation modeling (currently reachability only)
+
+## Contributing
+
+This project was developed for Smart India Hackathon 2026. While the repository is now public, it is primarily maintained for demonstration and educational purposes.
+
+For questions or issues, please open an issue on GitHub.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- **Smart India Hackathon 2026** - Problem statement and platform
+- **Ministry of Statistics and Programme Implementation (MoSPI)** - PAIMANA data source
+- **Open Source Community** - All libraries and frameworks used

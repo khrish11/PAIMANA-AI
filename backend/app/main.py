@@ -15,6 +15,8 @@ from app.api.v1.imports import router as imports_router
 from app.api.v1.data_health import router as data_health_router
 from app.api.v1.audit import router as audit_router
 from app.api.v1.reports import router as reports_router
+from app.api.v1.data_operations import router as data_operations_router
+from app.api.v1.alerts import router as alerts_router
 
 
 @asynccontextmanager
@@ -55,7 +57,6 @@ app.add_middleware(
 )
 
 # Mount all v1 routers
-app.include_router(projects_router, prefix="/api/v1")
 app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(governance_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
@@ -67,6 +68,9 @@ app.include_router(imports_router, prefix="/api/v1")
 app.include_router(data_health_router, prefix="/api/v1")
 app.include_router(audit_router, prefix="/api/v1")
 app.include_router(reports_router, prefix="/api/v1")
+app.include_router(data_operations_router, prefix="/api/v1/data_operations")
+app.include_router(projects_router, prefix="/api/v1")
+app.include_router(alerts_router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["health"])

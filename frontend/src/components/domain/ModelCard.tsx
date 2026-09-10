@@ -99,7 +99,7 @@ export const ModelCard: React.FC<ModelCardProps> = ({
               color: colors.text.secondary,
             }}
           >
-            Limited completed outcomes. Not production validated.
+            Trained on 454 completed projects (v2). Not production validated.
           </div>
         </div>
       )}

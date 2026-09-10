@@ -20,13 +20,15 @@ if TYPE_CHECKING:
 class Role(IntEnum):
     """Role hierarchy — higher ordinal = more privileges."""
     VIEWER = 0
-    ANALYST = 1
-    REVIEWER = 2
-    ADMIN = 3
+    AGENCY = 1
+    ANALYST = 2
+    REVIEWER = 3
+    ADMIN = 4
 
 
 ROLE_MAP = {
     "viewer": Role.VIEWER,
+    "agency": Role.AGENCY,
     "analyst": Role.ANALYST,
     "reviewer": Role.REVIEWER,
     "admin": Role.ADMIN,
@@ -71,20 +73,33 @@ def get_current_user(
 
 
 class RequireRole:
-    """Dependency class that enforces minimum role level."""
+    """Dependency class that enforces exact minimum role level."""
     
     def __init__(self, min_role: Role):
         self.min_role = min_role
     
     def __call__(self, user = Depends(get_current_user)):
-        if user["role"] < self.min_role:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=(
-                    f"Insufficient privileges. Required: {self.min_role.name}, "
-                    f"Current: {user['role_name']}."
-                ),
-            )
+        # Only allow users with exactly the minimum role or higher for specific operations
+        # For project creation, only AGENCY should be allowed
+        if user["role"] != self.min_role:
+            # For operations that require specific roles (not hierarchical)
+            # Check if this is a role-specific operation
+            if self.min_role == Role.AGENCY:
+                # Only AGENCY can create projects
+                if user["role"] != Role.AGENCY:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Insufficient privileges. Required: {self.min_role.name}, Current: {user['role_name']}."
+                    )
+            elif user["role"] < self.min_role:
+                # For hierarchical operations, check minimum level
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=(
+                        f"Insufficient privileges. Required: {self.min_role.name}, "
+                        f"Current: {user['role_name']}."
+                    ),
+                )
         return user
 
 

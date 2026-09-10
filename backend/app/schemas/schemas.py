@@ -829,3 +829,73 @@ class PlaybookSuggestionsResponse(BaseModel):
     suggestions: list[PlaybookSuggestionResponse] = Field(default_factory=list)
     project_id: str
     total_count: int
+
+
+# ─── Continuous Data Operations ────────────────────────────────────────────────
+
+class ProjectCreate(BaseModel):
+    project_name: str | None = None
+    project_code: str | None = None
+    sector: str
+    ministry: str
+    department: str | None = None
+    state: str
+    implementing_agency: str | None = None
+    sanctioned_cost: float
+    approved_date: date
+    original_completion_date: date | None = None
+    revised_completion_date: date | None = None
+    status: str = "ONGOING"
+    data_source: str | None = None
+    source_file: str | None = None
+    source_date: date | None = None
+    import_method: str | None = None
+    provenance_status: str | None = None
+
+
+class ProjectResponse(BaseModel):
+    project_id: str
+    project_name: str | None = None
+    project_code: str | None = None
+    sector: str
+    ministry: str
+    department: str | None = None
+    state: str
+    implementing_agency: str | None = None
+    sanctioned_cost: float
+    approved_date: str | None = None
+    original_completion_date: str | None = None
+    revised_completion_date: str | None = None
+    status: str
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+class SubmissionCreate(BaseModel):
+    reporting_month: date
+    project_id: str | None = None
+    submitted_by: str | None = None
+    revised_cost: float | None = None
+    expenditure: float | None = None
+    physical_progress: float | None = None
+    planned_completion: date | None = None
+    narrative_text: str | None = None
+    revision_reason: str | None = None
+    data_source: str | None = None
+    source_file: str | None = None
+    source_date: date | None = None
+    import_method: str | None = None
+    provenance_status: str | None = None
+
+
+class SubmissionResponse(BaseModel):
+    submission_id: str
+    project_id: str
+    reporting_month: str | None = None
+    status: str
+    message: str
+    version: int
+    dcs_score: float | None = None
+    risk_score: float | None = None
+    anomaly_count: int | None = None
+    governance_status: str | None = None

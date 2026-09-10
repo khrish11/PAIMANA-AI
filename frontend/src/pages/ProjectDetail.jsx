@@ -148,6 +148,140 @@ function ProjectDetail() {
       maxWidth: '100%',
       overflow: 'hidden'
     }}>
+      {/* Project Metadata & Provenance */}
+      <Card padding="lg">
+        <h3 style={{ fontSize: typography.fontSize.lg, fontWeight: 600, color: colors.text.primary, marginBottom: spacing.lg }}>
+          Project Information
+        </h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: spacing.lg }}>
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Project Code
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, fontWeight: 600, color: colors.text.primary }}>
+              {riskData?.project_code || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Project ID
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, fontWeight: 600, color: colors.text.primary }}>
+              {riskData?.project_id || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Ministry
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.ministry || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Sector
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.sector || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              State
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.state || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Implementing Agency
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.implementing_agency || 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Sanctioned Cost
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.sanctioned_cost ? `₹${riskData.sanctioned_cost.toFixed(2)} Cr` : 'N/A'}
+            </div>
+          </div>
+          
+          <div>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+              Approval Date
+            </div>
+            <div style={{ fontSize: typography.fontSize.base, color: colors.text.primary }}>
+              {riskData?.approval_date ? new Date(riskData.approval_date).toLocaleDateString() : 'N/A'}
+            </div>
+          </div>
+        </div>
+
+        {/* Provenance Section */}
+        <div style={{ 
+          marginTop: spacing.lg, 
+          paddingTop: spacing.lg,
+          borderTop: `1px solid ${colors.border.default}`
+        }}>
+          <h4 style={{ 
+            fontSize: typography.fontSize.base, 
+            fontWeight: 600, 
+            color: colors.text.primary,
+            marginBottom: spacing.md 
+          }}>
+            Data Provenance
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: spacing.md }}>
+            <div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Data Source
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                {riskData?.data_source || 'CUF Submission'}
+              </div>
+            </div>
+            
+            <div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Latest Reporting Month
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                {riskData?.reporting_month ? new Date(riskData.reporting_month).toLocaleDateString() : 'N/A'}
+              </div>
+            </div>
+            
+            <div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Last Updated
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                {riskData?.last_updated ? new Date(riskData.last_updated).toLocaleString() : 'N/A'}
+              </div>
+            </div>
+            
+            <div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Import Method
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.primary }}>
+                {riskData?.import_method || 'Manual Entry'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+
       {/* Intelligence Header */}
       <IntelligenceHeader
         title={riskData?.project_name || 'Project'}
@@ -201,6 +335,83 @@ function ProjectDetail() {
         onWhyClick={handleWhyClick} 
         onComponentClick={handleComponentClick} 
       />
+
+      {/* ML Predictions */}
+      {riskData?.ml_model_status === 'success' && (
+        <Card padding="lg">
+          <h3 style={{ fontSize: typography.fontSize.lg, fontWeight: 600, color: colors.text.primary, marginBottom: spacing.lg }}>
+            ML-Driven Risk Predictions
+          </h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: spacing.lg }}>
+            {/* Cost Overrun Prediction */}
+            <div style={{
+              padding: spacing.md,
+              backgroundColor: colors.background.tertiary,
+              borderRadius: borderRadius.md,
+              border: `1px solid ${colors.border.default}`
+            }}>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Cost Overrun Risk
+              </div>
+              <div style={{ fontSize: typography.fontSize['2xl'], fontWeight: 600, color: colors.text.primary, marginBottom: spacing.xs }}>
+                {riskData.shap?.predicted_probability ? `${(riskData.shap.predicted_probability * 100).toFixed(1)}%` : 'N/A'}
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                Probability of >10% cost overrun
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                <Badge variant={riskData.shap?.predicted_probability > 0.5 ? 'danger' : 'success'} size="sm">
+                  {riskData.shap?.predicted_probability > 0.5 ? 'HIGH RISK' : 'LOW RISK'}
+                </Badge>
+                <div style={{ fontSize: typography.fontSize.xs, color: colors.text.muted }}>
+                  Model: {riskData.ml_model_version || 'v2'}
+                </div>
+              </div>
+            </div>
+
+            {/* Schedule Delay Prediction */}
+            <div style={{
+              padding: spacing.md,
+              backgroundColor: colors.background.tertiary,
+              borderRadius: borderRadius.md,
+              border: `1px solid ${colors.border.default}`
+            }}>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.muted, marginBottom: spacing.xs }}>
+                Schedule Delay Risk
+              </div>
+              <div style={{ fontSize: typography.fontSize['2xl'], fontWeight: 600, color: colors.text.primary, marginBottom: spacing.xs }}>
+                {riskData.ml_schedule_probability ? `${(riskData.ml_schedule_probability * 100).toFixed(1)}%` : 'N/A'}
+              </div>
+              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.sm }}>
+                Probability of >6 month delay
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                <Badge variant={riskData.ml_schedule_probability > 0.5 ? 'danger' : 'warning'} size="sm">
+                  {riskData.ml_schedule_probability > 0.5 ? 'HIGH RISK' : 'MODERATE RISK'}
+                </Badge>
+                <div style={{ fontSize: typography.fontSize.xs, color: colors.text.muted }}>
+                  Model: {riskData.ml_model_version || 'v2'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: spacing.md,
+            padding: spacing.md,
+            backgroundColor: `${colors.accent.info}10`,
+            borderRadius: borderRadius.sm,
+            borderLeft: `3px solid ${colors.accent.info}`
+          }}>
+            <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary }}>
+              <strong>ML Model Status:</strong> {riskData.ml_model_status} • 
+              <strong> Version:</strong> {riskData.ml_model_version || '2.0'} • 
+              <strong> Method:</strong> {riskData.shap?.method || 'XGBoost + LightGBM'}
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Model Transparency */}
       {riskData?.ml_model_status && (

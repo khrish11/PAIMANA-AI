@@ -1,0 +1,86 @@
+project_id,original_completion_date,revised_completion_date,delay_months,delay_gt_3_months,delay_gt_6_months,delay_gt_12_months,completion_reason,completion_date
+PC-709783,06/2023,10/2026,40,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705419,03/2025,02/2026,11,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-612688,06/2024,06/2025,12,1,1,0,progress_100,2025-10
+PC-705694,12/2023,01/2026,25,1,1,1,progress_100,2025-11
+PN-muzaffarpur_-_sonbarsa_section-bihar-nhai,11/2013,11/2013,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618838,08/2024,08/2026,24,1,1,1,progress_100,2026-07
+PC-619119,07/2020,09/2026,74,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705527,12/2025,12/2025,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-701600,10/2021,08/2025,46,1,1,1,progress_100,2026-02
+PN-janghai-phaphamau_doubling_rai-uttar prad-rvnl,01/2025,03/2025,2,0,0,0,expenditure_ge_sanctioned,2025-12
+PC-618899,04/2021,08/2026,64,1,1,1,progress_100,2026-07
+PC-400116,12/2019,12/2026,84,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-619162,06/2024,08/2026,26,1,1,1,progress_100,2026-07
+PN-rajasthan_refinery_project_701-rajasthan-ministryofpetroleumn,10/2022,10/2022,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618874,07/2010,06/2026,191,1,1,1,progress_100,2026-05
+PC-618449,04/2023,09/2026,41,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-611966,07/2025,05/2026,10,1,1,0,"progress_100, expenditure_ge_sanctioned",2026-06
+PN-6l_access_controlled_highway_f-delhi-nhai,07/2024,07/2024,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-705505,12/2025,10/2026,10,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-607701,10/2023,05/2026,31,1,1,1,expenditure_ge_sanctioned,2026-04
+PC-618436,06/2019,07/2025,73,1,1,1,progress_100,2026-07
+PC-617913,05/2020,06/2026,73,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-602098,06/2023,11/2025,29,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705662,12/2024,03/2026,15,1,1,1,expenditure_ge_sanctioned,2026-02
+PC-706724,03/2025,06/2026,15,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-616616,06/2025,12/2026,18,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-612185,06/2025,01/2026,7,1,1,0,progress_100,2026-02
+PC-618789,10/2024,06/2025,8,1,1,0,expenditure_ge_sanctioned,2026-02
+PC-706811,06/2023,08/2026,38,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-western_region_expansion_schem-chhattisga-power_grid_corporati,08/2023,08/2023,0,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-602184,09/2019,09/2029,120,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-400259,11/2020,03/2026,64,1,1,1,expenditure_ge_sanctioned,2026-04
+PC-618897,08/2020,04/2026,68,1,1,1,progress_100,2026-05
+PC-619210,09/2023,09/2026,36,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-ghatampur_thermal_power_plant_-uttar prad-nlc_india_limited_[n,06/2026,11/2020,-67,0,0,0,expenditure_ge_sanctioned,2026-05
+PC-618893,10/2019,08/2026,82,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705661,09/2024,09/2026,24,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-balance_work_of_panikoili_rimo-odisha-nhai,03/2022,03/2022,0,0,0,0,expenditure_ge_sanctioned,2026-06
+PC-618748,09/2024,05/2025,8,1,1,0,progress_100,2026-05
+PC-602185,03/2013,07/2029,196,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618611,06/2023,08/2026,38,1,1,1,progress_100,2026-07
+PC-618653,03/2021,12/2026,69,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-rehabilitation_and_upgradation-telangana-morth,12/2025,11/2019,-73,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-701406,12/2019,03/2026,75,1,1,1,"progress_100, expenditure_ge_sanctioned",2026-06
+PC-709858,08/2025,11/2025,3,0,0,0,progress_100,2025-11
+PC-709839,10/2025,12/2026,14,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618840,04/2019,10/2026,90,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-701398,12/2019,06/2026,78,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618220,07/2024,03/2026,20,1,1,1,progress_100,2026-05
+"PN-assam_bio_refinery,_abrpl_6047-assam-ministry_of_petroleu",09/2025,09/2021,-48,0,0,0,expenditure_ge_sanctioned,2025-09
+"PN-berth_no._2_[previously_berth_-west benga-haldia_dock_complex,",01/2026,09/2025,-4,0,0,0,expenditure_ge_sanctioned,2026-03
+PC-618883,07/2025,08/2026,13,1,1,1,progress_100,2026-07
+PC-619083,02/2009,08/2026,210,1,1,1,progress_100,2026-05
+PC-705610,12/2025,03/2026,3,0,0,0,expenditure_ge_sanctioned,2026-07
+PN-construction_of_oil_jetty_no.8-gujarat-deendayal_port_trust,03/2024,02/2023,-13,0,0,0,expenditure_ge_sanctioned,2026-03
+PC-618347,06/2022,08/2026,50,1,1,1,progress_100,2026-07
+PC-705457,03/2027,09/2028,18,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618577,11/2020,05/2024,42,1,1,1,progress_100,2026-06
+PC-618710,11/2023,08/2026,33,1,1,1,progress_100,2026-07
+"PN-pp_project,_pata_400161-uttar prad-gas_authority_of_ind",02/2026,01/2024,-25,0,0,0,expenditure_ge_sanctioned,2026-02
+PC-618125,03/2020,10/2025,67,1,1,1,progress_100,2026-07
+PC-619160,01/2025,01/2026,12,1,1,0,progress_100,2026-07
+PC-400298,05/2027,03/2028,10,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-618563,03/2022,08/2026,53,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618937,10/2023,03/2027,41,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-618464,12/2023,05/2026,29,1,1,1,expenditure_ge_sanctioned,2026-05
+PC-618099,04/2026,04/2026,0,0,0,0,progress_100,2026-05
+PC-701402,12/2019,03/2026,75,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-kagvadar_-_una_package-iv_6191-gujarat-nhai,06/2026,09/2019,-81,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-705515,03/2026,03/2026,0,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-705373,03/2023,08/2025,29,1,1,1,expenditure_ge_sanctioned,2026-07
+PN-augmentation_of_1x1500_mva_3rd-andhra pra-power_grid_corporati,03/2026,09/2025,-6,0,0,0,expenditure_ge_sanctioned,2026-03
+PN-operationalization_of_coastal_-maharashtr-jawaharlal_nehru_por,01/2026,01/2026,0,0,0,0,expenditure_ge_sanctioned,2025-09
+PC-618864,03/2025,07/2026,16,1,1,1,progress_100,2026-05
+PN-upgradatiobn_and_rehabilitatio-maharashtr-morth,08/2025,09/2023,-23,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-705784,03/2025,03/2025,0,0,0,0,expenditure_ge_sanctioned,2025-11
+PC-619117,03/2019,08/2026,89,1,1,1,expenditure_ge_sanctioned,2026-07
+PC-705612,02/2025,12/2025,10,1,1,0,expenditure_ge_sanctioned,2026-06
+PC-705632,01/2025,12/2025,11,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-709849,02/2026,12/2026,10,1,1,0,expenditure_ge_sanctioned,2026-07
+PC-619086,03/2013,10/2026,163,1,1,1,progress_100,2026-07
+PC-618166,10/2025,07/2026,9,1,1,0,progress_100,2026-07
+PN-widening_and_strengthening_of_-telangana-morth,11/2024,11/2019,-60,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-617245,08/2027,02/2027,-6,0,0,0,expenditure_ge_sanctioned,2026-07
+PC-612819,09/2024,12/2025,15,1,1,1,progress_100,2026-04
